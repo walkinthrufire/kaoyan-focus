@@ -480,7 +480,7 @@ body.resting .pv{animation:breathe 6.5s ease-in-out infinite}
     </div>
     <div class="tb-sub">
       已过 <span class="num" id="cdPast">0</span> 天 · <span class="num" id="cdHMS">00:00:00</span><br>
-      <em id="goalBtn" title="点击修改">目标：上交 085400 / 国科大 085404</em>
+      <em id="goalBtn" title="点击修改">写一句给自己的话</em>
     </div>
     <div class="tb-lv">
       <div class="lv-badge"><i>LV</i><b class="num" id="lvNum">1</b></div>
@@ -1597,7 +1597,7 @@ function load(){
   if(!Array.isArray(out.diary)) out.diary = [];
   if(!SCENE_BY_ID[out.scene]) out.scene = "desk";
   if(typeof out.gems !== "number") out.gems = 0;
-  if(!out.goal || out.goal === "\u4e0a\u4ea4 085400 / \u56fd\u79d1\u5927 085404") out.goal = b.goal;
+  if(!out.goal) out.goal = b.goal;
   if(!TONE_SET[out.tone]) out.tone = b.tone;
 
   // 老数据升级：第一次进 v2 时补发 XP 与钻石
