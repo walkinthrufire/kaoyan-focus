@@ -59,8 +59,9 @@ body::before{
 }
 .lv-badge i{font-style:normal;font-size:9px;color:var(--tx-3);letter-spacing:.06em}
 .lv-badge b{font-size:16px;color:var(--focus);font-weight:600}
-.lv-meta{min-width:150px}
-.lv-meta span{font-size:10.5px;color:var(--tx-3);display:block;margin-bottom:4px}
+.lv-meta{min-width:158px}
+.lv-meta .lv-a{font-size:11.5px;color:var(--tx-2);display:block;white-space:nowrap;line-height:1.4}
+.lv-meta .lv-b{font-size:10.5px;color:var(--tx-3);display:block;white-space:nowrap;line-height:1.4;margin-bottom:5px}
 .track{height:6px;background:var(--panel-3);border-radius:3px;overflow:hidden}
 .fill{height:100%;border-radius:3px;transition:width .4s cubic-bezier(.4,0,.2,1)}
 .tb-gem{
@@ -485,7 +486,8 @@ body.resting .pv{animation:breathe 6.5s ease-in-out infinite}
     <div class="tb-lv">
       <div class="lv-badge"><i>LV</i><b class="num" id="lvNum">1</b></div>
       <div class="lv-meta">
-        <span><b class="num" id="xpNow">0</b> / <span class="num" id="xpNeed">60</span> XP · 下个场景 <span id="nextScene">长安书房</span></span>
+        <span class="lv-a"><b class="num" id="xpNow">0</b> / <span class="num" id="xpNeed">60</span> XP</span>
+        <span class="lv-b">下一处 · <span id="nextScene">长安书房</span></span>
         <div class="track"><div class="fill" id="xpBar" style="width:0%;background:var(--focus)"></div></div>
       </div>
     </div>
