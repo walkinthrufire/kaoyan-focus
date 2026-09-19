@@ -1508,6 +1508,9 @@ const MESSAGES = [
   { lv:30, who:"自己", text:"走到这里的人不多。谢谢你没有停下来。" }
 ];
 
+/* 音色合法值（必须在 load() 之前定义，const 有暂时性死区） */
+const TONE_SET = { night:1, dusk:1, dawn:1, day:1 };
+
 /* ── 等级 ── */
 function xpNeed(lv){ return 60 + (lv - 1) * 45; }
 function lvFromXp(xp){
@@ -1611,13 +1614,18 @@ function load(){
   return out;
 }
 
-let D = load();
+let D;
+try{
+  D = load();
+}catch(err){
+  // 兜底：读数据出任何错都不该让整个页面停摆（曾经因为一个 TDZ 白屏过）
+  D = blank();
+  try{ D.subjects = buildSubjects(null); }catch(e2){}
+}
 
 function save(){
   try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){}
 }
-
-const TONE_SET = { night:1, dusk:1, dawn:1, day:1 };
 
 /* ═══════════════ 工具 ═══════════════ */
 const $ = id => document.getElementById(id);
