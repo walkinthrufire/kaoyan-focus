@@ -1,0 +1,2989 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>考研专注室</title>
+<style>
+:root{
+  --bg:#0B0E14;--panel:#131822;--panel-2:#181E2A;--panel-3:#1E2534;
+  --line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.13);
+  --tx:#E9ECF2;--tx-2:#98A1B3;--tx-3:#5F6879;
+  --focus:#FF7A45;--focus-2:#FF9A6B;--focus-dim:#8A3E1E;
+  --rest:#3DDC97;--gold:#F5C451;--blue:#5B9DFF;--purple:#A78BFA;--pink:#FF6BD6;
+  --r:16px;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+}
+body[data-scene="changan"]{--bg:#120E09;--panel:#1C1610;--panel-2:#241C14;--panel-3:#2C2318;--focus:#E0A34A;--focus-2:#F0BE72;--focus-dim:#6B4A18;--tx:#F2E8DA;--tx-2:#A8998A;--tx-3:#6B5F52;--line:rgba(224,163,74,.10);--line-2:rgba(224,163,74,.22);}
+body[data-scene="neon"]{--bg:#0A0B1A;--panel:#12142A;--panel-2:#181B36;--panel-3:#1F2340;--focus:#FF4FD8;--focus-2:#FF7FE4;--focus-dim:#7A1A66;--tx:#EAE9F5;--tx-2:#9A9AC0;--tx-3:#63638A;--line:rgba(255,255,255,.08);--line-2:rgba(255,255,255,.16);}
+body[data-scene="cabin"]{--bg:#130F0B;--panel:#1D1611;--panel-2:#251C15;--panel-3:#2E231A;--focus:#E8874A;--focus-2:#FFA870;--focus-dim:#6E3A18;--tx:#F3E9DF;--tx-2:#A99B8C;--tx-3:#6D6153;--line:rgba(232,135,74,.11);--line-2:rgba(232,135,74,.23);}
+body[data-scene="library"]{--bg:#0C1117;--panel:#141C25;--panel-2:#1A242F;--panel-3:#212D3A;--focus:#78B4DE;--focus-2:#9CCBEC;--focus-dim:#2C5878;--tx:#E6EEF6;--tx-2:#93A5B6;--tx-3:#5E6E7E;--line:rgba(255,255,255,.07);--line-2:rgba(255,255,255,.15);}
+body[data-scene="space"]{--bg:#060912;--panel:#0E1626;--panel-2:#131D31;--panel-3:#1A263C;--focus:#5FE3FF;--focus-2:#8FEEFF;--focus-dim:#1B5A6E;--tx:#E4F2FA;--tx-2:#8FA5B8;--tx-3:#5A6E82;--line:rgba(95,227,255,.11);--line-2:rgba(95,227,255,.24);}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:var(--bg);color:var(--tx);font-family:var(--font);font-size:14px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;padding:16px;transition:background .5s;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(900px 520px at 18% -12%,color-mix(in srgb,var(--focus) 12%,transparent),transparent 62%),
+             radial-gradient(720px 420px at 102% 104%,rgba(91,157,255,.07),transparent 62%);
+  transition:background .5s;
+}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+.app{position:relative;z-index:1;max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:#2A3342;border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:#39445A}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ── 顶栏 ── */
+.topbar{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 18px;
+}
+.tb-d{display:flex;align-items:baseline;gap:7px}
+.tb-d b{font-size:34px;font-weight:600;color:var(--focus);line-height:1;letter-spacing:-.02em}
+.tb-d span{font-size:12px;color:var(--tx-3)}
+.tb-sub{font-size:11px;color:var(--tx-3);max-width:230px;line-height:1.35}
+.tb-sub em{font-style:normal;color:var(--tx-2);cursor:pointer;border-bottom:1px dashed var(--line-2)}
+.tb-lv{display:flex;align-items:center;gap:9px;margin-left:auto}
+.lv-badge{
+  width:42px;height:42px;border-radius:12px;flex:none;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--focus) 30%,transparent),transparent);
+  border:1px solid var(--line-2);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;line-height:1;
+}
+.lv-badge i{font-style:normal;font-size:9px;color:var(--tx-3);letter-spacing:.06em}
+.lv-badge b{font-size:16px;color:var(--focus);font-weight:600}
+.lv-meta{min-width:150px}
+.lv-meta span{font-size:10.5px;color:var(--tx-3);display:block;margin-bottom:4px}
+.track{height:6px;background:var(--panel-3);border-radius:3px;overflow:hidden}
+.fill{height:100%;border-radius:3px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+.tb-gem{
+  display:flex;align-items:center;gap:6px;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:11px;padding:8px 14px;
+}
+.tb-gem svg{width:17px;height:17px;flex:none}
+.tb-gem b{font-size:17px;color:var(--blue);font-weight:500}
+.tb-gem span{font-size:10px;color:var(--tx-3)}
+.tb-btns{display:flex;gap:7px;flex-wrap:wrap}
+.ibtn{
+  font-family:var(--font);font-size:12.5px;border-radius:10px;cursor:pointer;
+  border:1px solid var(--line-2);background:var(--panel-2);color:var(--tx-2);
+  padding:8px 13px;transition:.16s;white-space:nowrap;
+}
+.ibtn:hover{background:var(--panel-3);color:var(--tx)}
+.ibtn.on{background:var(--focus);border-color:var(--focus);color:#170A04;font-weight:500}
+
+/* ── 色调档：深夜 / 黄昏 / 晨光 / 白天 ──
+   --bg / --panel / 文字色由色调决定；--focus 等强调色仍由场景决定 */
+body[data-tone="dusk"]{
+  --bg:#191424;--panel:#221B31;--panel-2:#2A2238;--panel-3:#332A44;
+  --line:rgba(255,214,196,.10);--line-2:rgba(255,214,196,.21);
+  --tx:#F1E9F7;--tx-2:#B3A6C2;--tx-3:#7E728C;
+}
+body[data-tone="dawn"]{
+  --bg:#F6F0E3;--panel:#FFFCF4;--panel-2:#F5EDE0;--panel-3:#EBE1D1;
+  --line:rgba(122,92,52,.14);--line-2:rgba(122,92,52,.28);
+  --tx:#3B3327;--tx-2:#6E6252;--tx-3:#9E917C;
+  --gold:#B98A12;--blue:#3576CC;--rest:#17A165;--purple:#7355CF;
+}
+body[data-tone="day"]{
+  --bg:#EFF3F8;--panel:#FFFFFF;--panel-2:#F4F7FB;--panel-3:#E8EEF5;
+  --line:rgba(42,62,92,.12);--line-2:rgba(42,62,92,.24);
+  --tx:#233040;--tx-2:#5B6A7A;--tx-3:#93A1B0;
+  --gold:#B98A12;--blue:#3576CC;--rest:#17A165;--purple:#7355CF;
+}
+/* 浅色档里几个硬编码的深色零件要跟着换 */
+body[data-tone="dawn"] .bar.empty,body[data-tone="day"] .bar.empty{background:#DDE3EB}
+body[data-tone="dawn"] .ch .box,body[data-tone="dawn"] .task .box,
+body[data-tone="day"] .ch .box,body[data-tone="day"] .task .box{border-color:#B7C0CB}
+body[data-tone="dawn"] .sw,body[data-tone="day"] .sw{background:#CFC9D3}
+body[data-tone="dawn"] .scene-wrap{background:#E9E2D4}
+body[data-tone="day"] .scene-wrap{background:#E1E8F0}
+body[data-tone="dawn"] ::-webkit-scrollbar-thumb,body[data-tone="day"] ::-webkit-scrollbar-thumb{background:#C6CBD3}
+body[data-tone="dawn"] ::-webkit-scrollbar-thumb:hover,body[data-tone="day"] ::-webkit-scrollbar-thumb:hover{background:#AEB5C0}
+body[data-tone="dawn"]::before,body[data-tone="day"]::before{opacity:.45}
+body[data-tone="dawn"] .btn:hover,body[data-tone="day"] .btn:hover{background:var(--panel-3)}
+body[data-tone="dawn"] .ach,body[data-tone="day"] .ach{opacity:.42}
+body[data-tone="dawn"] .ach.on,body[data-tone="day"] .ach.on{opacity:1}
+/* 场景插画在亮色调下整体提亮，再叠一层色偏 */
+.scene-wrap svg{transition:filter .5s}
+body[data-tone="dusk"] .scene-wrap svg{filter:brightness(1.2) saturate(1.12)}
+body[data-tone="dawn"] .scene-wrap svg{filter:brightness(2.55) saturate(.88) contrast(.85)}
+body[data-tone="day"]  .scene-wrap svg{filter:brightness(3.15) saturate(.74) contrast(.8)}
+.scene-wrap::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;transition:background .5s}
+body[data-tone="dusk"] .scene-wrap::after{background:rgba(120,58,148,.13)}
+body[data-tone="dawn"] .scene-wrap::after{background:rgba(255,226,176,.30);mix-blend-mode:screen}
+body[data-tone="day"]  .scene-wrap::after{background:rgba(236,246,255,.24);mix-blend-mode:screen}
+
+/* ── 色调切换 ── */
+.tonebox{display:flex;gap:3px;background:var(--panel-2);border-radius:10px;padding:3px;border:1px solid var(--line)}
+.tonebox button{
+  border:none;background:transparent;color:var(--tx-3);font-family:var(--font);
+  font-size:11.5px;padding:6px 9px;border-radius:7px;cursor:pointer;transition:.16s;white-space:nowrap;
+}
+.tonebox button:hover{color:var(--tx-2)}
+.tonebox button.on{background:var(--focus);color:#170A04;font-weight:500}
+
+/* ── 分享 / 下载 ── */
+.share{display:grid;grid-template-columns:1.5fr 1fr;gap:20px;align-items:center}
+.share h4{font-size:15px;font-weight:500;margin-bottom:7px}
+.share p{font-size:12.5px;color:var(--tx-2);line-height:1.75;white-space:pre-line}
+.share .urlrow{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.share code{
+  font-family:var(--font);font-size:12px;background:var(--panel-2);border:1px solid var(--line);
+  border-radius:8px;padding:7px 12px;color:var(--tx-2);user-select:all;word-break:break-all;
+}
+.dl-list{display:flex;flex-direction:column;gap:9px}
+.dl-btn{
+  display:flex;align-items:center;gap:12px;text-decoration:none;
+  background:var(--panel-2);border:1px solid var(--line-2);border-radius:12px;
+  padding:12px 15px;color:var(--tx);transition:.18s;
+}
+.dl-btn:hover{background:var(--focus);border-color:var(--focus);color:#170A04}
+.dl-btn:hover em{color:rgba(23,10,4,.72)}
+.dl-ico{
+  width:32px;height:32px;flex:none;border-radius:9px;border:1px solid var(--line-2);
+  display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;
+}
+.dl-btn:hover .dl-ico{border-color:rgba(23,10,4,.35)}
+.dl-btn span b{display:block;font-size:13px;font-weight:500}
+.dl-btn em{font-style:normal;font-size:11px;color:var(--tx-3);display:block;margin-top:1px}
+@media(max-width:820px){.share{grid-template-columns:1fr}}
+
+/* ── 卡片 ── */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;transition:background .4s,border-color .4s}
+.card-title{font-size:11.5px;font-weight:500;letter-spacing:.09em;color:var(--tx-3);text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:8px}
+.card-title .tag{margin-left:auto;font-size:10.5px;letter-spacing:0;text-transform:none;color:var(--tx-3);text-decoration:underline;cursor:pointer;text-underline-offset:3px}
+.card-title .tag:hover{color:var(--tx-2)}
+
+/* ── 主区 ── */
+.main{display:grid;grid-template-columns:1.28fr 1fr;gap:14px;align-items:start}
+.col{display:flex;flex-direction:column;gap:14px;min-width:0}
+
+/* ── 场景 ── */
+.scene-wrap{position:relative;border-radius:13px;overflow:hidden;border:1px solid var(--line);background:#0A0D14;line-height:0}
+.scene-wrap svg{width:100%;height:auto;display:block}
+.scene-top{
+  position:absolute;top:9px;left:9px;right:9px;z-index:2;display:flex;gap:6px;align-items:center;
+  flex-wrap:wrap;pointer-events:none;
+}
+.scene-top .pill{
+  pointer-events:auto;font-size:11px;padding:4px 10px;border-radius:20px;
+  background:rgba(0,0,0,.45);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);
+  color:#E9ECF2;cursor:pointer;transition:.16s;
+}
+.scene-top .pill:hover{background:rgba(0,0,0,.66)}
+.scene-top .pill.lock{opacity:.55;cursor:not-allowed}
+.scene-top .pill.sel{background:var(--focus);border-color:var(--focus);color:#120A04;font-weight:500}
+.scene-top .grow{margin-left:auto}
+.scene-cap{font-size:11.5px;color:var(--tx-3);text-align:center;margin-top:9px}
+.scene-cap b{color:var(--focus);font-weight:500}
+
+/* ── 鱼缸 ── */
+.tank-row{display:flex;gap:12px;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+.tank{
+  width:118px;height:56px;flex:none;border-radius:8px;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,rgba(91,157,255,.13),rgba(91,157,255,.05));
+  border:1px solid var(--line-2);
+}
+.tank svg{width:100%;height:100%;display:block}
+.tank-info{flex:1;min-width:0}
+.tank-info .ti-h{font-size:12px;color:var(--tx-2);margin-bottom:2px}
+.tank-info .ti-h b{color:var(--blue);font-weight:500}
+.tank-info .ti-s{font-size:10.5px;color:var(--tx-3);line-height:1.4}
+
+/* ── 音频混音 ── */
+.mix-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+.mix-row{display:flex;align-items:center;gap:9px;padding:3px 0}
+.mix-row .mi{font-size:12px;color:var(--tx-2);width:52px;flex:none;white-space:nowrap}
+.mix-row input[type=range]{flex:1;min-width:0}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;height:4px;border-radius:2px;
+  background:var(--panel-3);outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:13px;height:13px;border-radius:50%;
+  background:var(--focus);cursor:pointer;border:2px solid var(--bg);
+  box-shadow:0 0 0 1px var(--line-2);
+}
+input[type=range].off::-webkit-slider-thumb{background:#4A5464}
+.mix-val{font-size:10.5px;color:var(--tx-3);width:24px;text-align:right;flex:none}
+
+/* ── 计时器 ── */
+.timer-card{display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:22px}
+.modes{display:flex;gap:6px;background:var(--panel-2);border-radius:10px;padding:4px}
+.mode{
+  border:none;background:transparent;color:var(--tx-2);font-family:var(--font);
+  font-size:13px;padding:7px 17px;border-radius:7px;cursor:pointer;transition:.18s;
+}
+.mode:hover{color:var(--tx)}
+.mode.on{background:var(--focus);color:#170A04;font-weight:500}
+.mode.on[data-mode="short"],.mode.on[data-mode="long"]{background:var(--rest);color:#03150D}
+.dial{position:relative;width:236px;height:236px}
+.dial svg{transform:rotate(-90deg);display:block}
+.dial-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.dial-time{font-size:52px;font-weight:300;letter-spacing:-.02em;color:var(--tx)}
+.dial-sub{font-size:11.5px;color:var(--tx-3);letter-spacing:.05em}
+.ctrls{display:flex;gap:9px;align-items:center}
+.btn{
+  font-family:var(--font);font-size:13.5px;border-radius:10px;cursor:pointer;
+  border:1px solid var(--line-2);background:var(--panel-2);color:var(--tx);
+  padding:10px 26px;transition:.18s;
+}
+.btn:hover{background:var(--panel-3)}
+.btn.primary{background:var(--focus);border-color:var(--focus);color:#170A04;font-weight:500}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{padding:10px 13px;color:var(--tx-2)}
+.btn.ghost:hover{color:var(--tx)}
+.hint{font-size:10.5px;color:var(--tx-3);text-align:center;line-height:1.5}
+.hint kbd{
+  font-family:var(--font);font-size:10px;background:var(--panel-3);border:1px solid var(--line-2);
+  border-radius:4px;padding:1px 5px;color:var(--tx-2);
+}
+
+/* ── 统计 ── */
+.stats-card{display:flex;flex-direction:column;gap:14px}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat b{display:block;font-size:24px;font-weight:500;line-height:1.2}
+.stat span{font-size:10.5px;color:var(--tx-3);letter-spacing:.05em}
+.stat.a b{color:var(--focus)}
+.stat.b b{color:var(--rest)}
+.stat.c b{color:var(--gold)}
+.stat.d b{color:var(--blue)}
+.chart{display:flex;align-items:flex-end;gap:5px;height:92px;padding-top:5px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:flex-end}
+.bar{width:100%;border-radius:4px 4px 2px 2px;min-height:3px;transition:height .4s cubic-bezier(.4,0,.2,1);background:linear-gradient(180deg,var(--focus),var(--focus-dim))}
+.bar.empty{background:#242B39}
+.bar-lab{font-size:9.5px;color:var(--tx-3)}
+.chart-foot{font-size:10.5px;color:var(--tx-3);display:flex;justify-content:space-between;margin-top:2px}
+
+/* ── 设置行 ── */
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;font-size:12.5px;color:var(--tx-2)}
+.set-row + .set-row{border-top:1px solid var(--line)}
+.set-row input[type=number]{
+  width:76px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+  padding:6px 9px;color:var(--tx);font-family:var(--font);font-size:12.5px;outline:none;text-align:center;
+}
+.sw{position:relative;width:40px;height:22px;border-radius:11px;background:#2A3241;cursor:pointer;transition:.2s;border:none;flex:none}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#8A93A6;transition:.2s}
+.sw.on{background:var(--rest)}
+.sw.on::after{left:20px;background:#03150D}
+
+/* ── 底部三列 ── */
+.grid3{display:grid;grid-template-columns:1.35fr 1fr;gap:14px;align-items:start}
+
+/* 科目 */
+.subj{margin-bottom:14px}
+.subj:last-child{margin-bottom:0}
+.subj-head{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none}
+.subj-dot{width:8px;height:8px;border-radius:2px;flex:none}
+.subj-name{font-size:12.5px;font-weight:500}
+.subj-score{font-size:10.5px;color:var(--tx-3)}
+.subj-pct{margin-left:auto;font-size:12.5px;color:var(--tx-2)}
+.subj-arrow{font-size:8px;color:var(--tx-3);transition:.2s}
+.subj.open .subj-arrow{transform:rotate(90deg)}
+.chapters{display:none;margin-top:10px;flex-direction:column;gap:1px}
+.subj.open .chapters{display:flex}
+.ch{display:flex;align-items:center;gap:8px;padding:5px 7px;border-radius:7px;cursor:pointer;font-size:12px;color:var(--tx-2);transition:.15s}
+.ch:hover{background:var(--panel-2);color:var(--tx)}
+.ch .box,.task .box{
+  width:14px;height:14px;border-radius:4px;border:1.5px solid #39424F;flex:none;
+  display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;transition:.15s;
+}
+.ch.done .box,.task.done .box{background:var(--rest);border-color:var(--rest);color:#03150D}
+.ch.done span{color:var(--tx-3);text-decoration:line-through}
+
+/* 任务 */
+.task-add{display:flex;gap:7px;margin-bottom:11px}
+.task-add input{
+  flex:1;min-width:0;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;
+  padding:9px 12px;color:var(--tx);font-family:var(--font);font-size:12.5px;outline:none;
+}
+.task-add input:focus{border-color:var(--line-2)}
+.task-add button{
+  background:var(--panel-2);border:1px solid var(--line-2);color:var(--tx-2);border-radius:9px;
+  padding:0 14px;cursor:pointer;font-family:var(--font);font-size:16px;
+}
+.task-add button:hover{color:var(--tx);background:var(--panel-3)}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px;border-radius:8px;cursor:pointer;transition:.15s;font-size:12.5px}
+.task:hover{background:var(--panel-2)}
+.task .box{margin-top:2px}
+.task.done .t-txt{color:var(--tx-3);text-decoration:line-through}
+.t-txt{flex:1;word-break:break-all}
+.t-del{color:var(--tx-3);font-size:15px;padding:0 4px;opacity:0;transition:.15s;line-height:1;background:none;border:none;cursor:pointer}
+.task:hover .t-del{opacity:1}
+.t-del:hover{color:#FF6B6B}
+.empty-hint{font-size:11.5px;color:var(--tx-3);text-align:center;padding:16px 0;line-height:1.7}
+
+/* 成就 */
+.ach-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:340px;overflow-y:auto;padding-right:4px}
+.ach{background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:10px 11px;opacity:.34;transition:.2s}
+.ach.on{opacity:1;border-color:rgba(245,196,81,.35);background:linear-gradient(135deg,rgba(245,196,81,.09),rgba(245,196,81,.02))}
+.ach b{display:block;font-size:11.5px;font-weight:500;margin-bottom:2px}
+.ach.on b{color:var(--gold)}
+.ach i{font-style:normal;font-size:10px;color:var(--tx-3);line-height:1.4;display:block}
+
+/* 便签 / 日记 */
+.stickies{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.sticky{
+  border-radius:9px;padding:9px 10px;font-size:11.5px;line-height:1.5;min-height:66px;
+  cursor:pointer;color:#2A2118;position:relative;word-break:break-all;
+}
+.sticky.empty{color:rgba(42,33,24,.42)}
+.sticky::after{content:"";position:absolute;top:0;right:0;border-width:0 12px 12px 0;border-style:solid;border-color:rgba(0,0,0,.14) transparent}
+.diary-item{display:flex;gap:9px;font-size:11.5px;padding:7px 0;border-bottom:1px solid var(--line)}
+.diary-item:last-child{border:none}
+.diary-item i{font-style:normal;color:var(--tx-3);flex:none;font-size:10.5px;padding-top:1px}
+.diary-item span{color:var(--tx-2);word-break:break-all}
+
+/* 门店 / 面板 */
+.modal{
+  position:fixed;inset:0;background:rgba(4,6,11,.72);backdrop-filter:blur(4px);
+  z-index:50;display:none;align-items:center;justify-content:center;padding:22px;
+}
+.modal.show{display:flex}
+.modal-box{
+  background:var(--panel);border:1px solid var(--line-2);border-radius:18px;
+  width:100%;max-width:760px;max-height:86vh;display:flex;flex-direction:column;
+  box-shadow:0 26px 70px rgba(0,0,0,.6);
+}
+.modal-head{display:flex;align-items:center;gap:11px;padding:17px 20px;border-bottom:1px solid var(--line)}
+.modal-head h3{font-size:15px;font-weight:500}
+.modal-head .sub{font-size:11px;color:var(--tx-3)}
+.modal-head .x{
+  margin-left:auto;background:none;border:none;color:var(--tx-3);font-size:21px;
+  cursor:pointer;line-height:1;padding:0 4px;font-family:var(--font);
+}
+.modal-head .x:hover{color:var(--tx)}
+.modal-body{padding:18px 20px;overflow-y:auto}
+.tabs{display:flex;gap:5px;margin-bottom:14px;background:var(--panel-2);border-radius:10px;padding:4px;width:fit-content}
+.tab{
+  border:none;background:transparent;color:var(--tx-2);font-family:var(--font);
+  font-size:12.5px;padding:6px 15px;border-radius:7px;cursor:pointer;transition:.16s;
+}
+.tab:hover{color:var(--tx)}
+.tab.on{background:var(--panel-3);color:var(--tx);font-weight:500}
+.pane{display:none}
+.pane.on{display:block}
+
+.shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.shop-item{
+  background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:12px;
+  display:flex;flex-direction:column;gap:8px;transition:.2s;
+}
+.shop-item.owned{border-color:rgba(61,220,151,.35);background:linear-gradient(135deg,rgba(61,220,151,.07),transparent)}
+.shop-item .si-top{display:flex;align-items:center;gap:9px}
+.shop-item .si-ic{width:34px;height:34px;flex:none;border-radius:9px;background:var(--panel-3);display:flex;align-items:center;justify-content:center}
+.shop-item .si-ic svg{width:22px;height:22px}
+.shop-item .si-n{font-size:12.5px;font-weight:500}
+.shop-item .si-d{font-size:10.5px;color:var(--tx-3);line-height:1.45;min-height:29px}
+.shop-item button{
+  font-family:var(--font);font-size:11.5px;border-radius:8px;cursor:pointer;padding:7px 10px;
+  border:1px solid var(--line-2);background:var(--panel-3);color:var(--tx);transition:.16s;width:100%;
+}
+.shop-item button:hover{background:var(--focus);border-color:var(--focus);color:#170A04}
+.shop-item button:disabled{opacity:.5;cursor:not-allowed;background:var(--panel-3);color:var(--tx-3);border-color:var(--line)}
+.shop-item button.act{background:var(--rest);border-color:var(--rest);color:#03150D;font-weight:500}
+
+/* 调饮 */
+.brew-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.brew-pick{display:flex;flex-direction:column;gap:7px}
+.brew-lab{font-size:11px;color:var(--tx-3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.chip{
+  font-family:var(--font);font-size:12px;padding:8px 12px;border-radius:9px;cursor:pointer;
+  border:1px solid var(--line);background:var(--panel-2);color:var(--tx-2);text-align:left;transition:.16s;
+}
+.chip:hover{border-color:var(--line-2);color:var(--tx)}
+.chip.on{background:var(--focus);border-color:var(--focus);color:#170A04;font-weight:500}
+.brew-out{
+  background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:14px;
+  display:flex;flex-direction:column;gap:8px;justify-content:center;min-height:150px;text-align:center;
+}
+.brew-out .bo-cup{font-size:38px;line-height:1}
+.brew-out .bo-n{font-size:14px;font-weight:500}
+.brew-out .bo-d{font-size:11.5px;color:var(--tx-3);line-height:1.5}
+.rec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:6px}
+.rec{
+  background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:9px;
+  text-align:center;font-size:11px;color:var(--tx-3);
+}
+.rec.on{color:var(--tx);border-color:var(--line-2)}
+.rec b{display:block;font-size:17px;margin-bottom:3px;filter:grayscale(1);opacity:.35}
+.rec.on b{filter:none;opacity:1}
+
+/* 手机留言 */
+.phone{max-width:400px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.msg{display:flex;gap:9px;align-items:flex-start}
+.msg .av{
+  width:31px;height:31px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  font-size:11px;background:var(--panel-3);color:var(--tx-2);border:1px solid var(--line-2);
+}
+.msg .bub{
+  background:var(--panel-2);border:1px solid var(--line);border-radius:3px 12px 12px 12px;
+  padding:9px 12px;font-size:12.5px;line-height:1.6;color:var(--tx-2);max-width:300px;
+}
+.msg .bub b{display:block;font-size:10.5px;color:var(--tx-3);font-weight:400;margin-bottom:3px}
+.msg.me{flex-direction:row-reverse}
+.msg.me .bub{background:color-mix(in srgb,var(--focus) 16%,transparent);border-color:color-mix(in srgb,var(--focus) 30%,transparent);border-radius:12px 3px 12px 12px;color:var(--tx)}
+.msg.lock .bub{opacity:.4;font-style:italic}
+
+.foot{font-size:10.5px;color:var(--tx-3);text-align:center;padding:4px 0 2px}
+.foot button{background:none;border:none;color:var(--tx-3);cursor:pointer;font-family:var(--font);font-size:10.5px;text-decoration:underline;text-underline-offset:3px}
+.foot button:hover{color:var(--tx-2)}
+
+/* ── 角色动画 ── */
+.pv{transform-box:fill-box;transform-origin:50% 100%}
+.pv-arm{transform-box:fill-box;transform-origin:50% 0%}
+.pv-head{transform-box:fill-box;transform-origin:50% 100%}
+body.studying .pv{animation:breathe 4.2s ease-in-out infinite}
+body.studying .pv-arm{animation:writeA 1.15s ease-in-out infinite}
+body.studying .pv-head{animation:nodA 5.4s ease-in-out infinite}
+body.resting .pv{animation:breathe 6.5s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:translateY(0) scaleY(1)}50%{transform:translateY(1.6px) scaleY(.985)}}
+@keyframes writeA{0%,100%{transform:rotate(0deg)}50%{transform:rotate(5deg)}}
+@keyframes nodA{0%,100%{transform:rotate(0deg)}40%{transform:rotate(1.6deg)}}
+.twinkle{animation:tw 3.4s ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.35}50%{opacity:1}}
+.ember{animation:em 2.6s ease-in-out infinite}
+@keyframes em{0%,100%{opacity:.55;transform:translateY(0)}50%{opacity:1;transform:translateY(-5px)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+
+@media(max-width:1080px){
+  .main,.grid3{grid-template-columns:1fr}
+  .mix-grid{grid-template-columns:1fr}
+  .shop-grid{grid-template-columns:repeat(2,1fr)}
+  .rec-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  body{padding:10px}
+  .tb-d b{font-size:26px}
+  .shop-grid,.brew-grid,.stickies{grid-template-columns:1fr}
+  .dial,.dial svg{width:190px;height:190px}
+  .dial-time{font-size:42px}
+}
+</style>
+</head>
+<body data-scene="desk">
+<div class="app">
+
+  <!-- ══ 顶栏 ══ -->
+  <div class="topbar">
+    <div class="tb-d">
+      <b class="num" id="cdDays">—</b><span>天后初试</span>
+    </div>
+    <div class="tb-sub">
+      已过 <span class="num" id="cdPast">0</span> 天 · <span class="num" id="cdHMS">00:00:00</span><br>
+      <em id="goalBtn" title="点击修改">目标：上交 085400 / 国科大 085404</em>
+    </div>
+    <div class="tb-lv">
+      <div class="lv-badge"><i>LV</i><b class="num" id="lvNum">1</b></div>
+      <div class="lv-meta">
+        <span><b class="num" id="xpNow">0</b> / <span class="num" id="xpNeed">60</span> XP · 下个场景 <span id="nextScene">长安书房</span></span>
+        <div class="track"><div class="fill" id="xpBar" style="width:0%;background:var(--focus)"></div></div>
+      </div>
+    </div>
+    <div class="tb-gem">
+      <svg viewBox="0 0 24 24"><path d="M12 2.5 L20.5 9.2 L12 21.5 L3.5 9.2 Z" fill="none" stroke="#5B9DFF" stroke-width="1.7" stroke-linejoin="round"/><path d="M3.5 9.2 H20.5" stroke="#5B9DFF" stroke-width="1.2" opacity=".65"/></svg>
+      <b class="num" id="gems">0</b><span>钻石</span>
+    </div>
+    <div class="tonebox" id="toneBox">
+      <button data-tone="night">深夜</button>
+      <button data-tone="dusk">黄昏</button>
+      <button data-tone="dawn">晨光</button>
+      <button data-tone="day">白天</button>
+    </div>
+    <div class="tb-btns">
+      <button class="ibtn" id="btnShop">装扮商店</button>
+      <button class="ibtn" id="btnBrew">饮品台</button>
+      <button class="ibtn" id="btnPhone">手机</button>
+      <button class="ibtn" id="btnMore">记录</button>
+    </div>
+  </div>
+
+  <!-- ══ 主区 ══ -->
+  <div class="main">
+
+    <!-- 左列：场景 + 任务 -->
+    <div class="col">
+
+    <!-- 场景 -->
+    <div class="card">
+      <div class="scene-wrap">
+        <div id="sceneSvg"></div>
+        <div class="scene-top" id="sceneTop"></div>
+      </div>
+      <div class="scene-cap" id="sceneCap">—</div>
+
+      <div class="tank-row">
+        <div class="tank"><svg id="tankSvg" viewBox="0 0 118 56"></svg></div>
+        <div class="tank-info">
+          <div class="ti-h" id="tankHead">鱼缸空着</div>
+          <div class="ti-s" id="tankSub">去装扮商店买一条鱼。它会自己攒钻石，养大了能卖更高价。</div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;padding-top:13px;border-top:1px solid var(--line)">
+        <div class="card-title">环境音 <span class="tag" id="mixPreset">套用场景预设</span></div>
+        <div class="mix-grid" id="mixGrid"></div>
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <button class="ibtn" id="btnMusic">Lofi 音乐</button>
+          <button class="ibtn" id="btnMuteAll">全部静音</button>
+          <span class="mix-val" id="audioState" style="margin-left:auto;width:auto">声音未启动</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">今日任务 <span class="tag" id="taskCount">0 / 0</span></div>
+      <div class="task-add">
+        <input id="taskInput" placeholder="今天必须完成的一件事…" maxlength="80">
+        <button id="taskAdd" title="添加">+</button>
+      </div>
+      <div id="taskList"></div>
+    </div>
+
+    </div>
+
+    <!-- 右列：计时器 + 统计 -->
+    <div class="col">
+
+      <!-- 计时器 -->
+      <div class="card timer-card">
+        <div class="modes">
+          <button class="mode on" data-mode="focus">专注</button>
+          <button class="mode" data-mode="short">短休</button>
+          <button class="mode" data-mode="long">长休</button>
+        </div>
+
+        <div class="dial">
+          <svg width="236" height="236" viewBox="0 0 236 236">
+            <defs>
+              <linearGradient id="gFocus" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#FF9A6B"/><stop offset="100%" stop-color="#FF7A45"/>
+              </linearGradient>
+              <linearGradient id="gRest" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#6EE7B7"/><stop offset="100%" stop-color="#3DDC97"/>
+              </linearGradient>
+            </defs>
+            <circle cx="118" cy="118" r="98" fill="none" stroke="var(--panel-3)" stroke-width="12"/>
+            <circle id="ring" cx="118" cy="118" r="98" fill="none" stroke="var(--focus)" stroke-width="12"
+                    stroke-linecap="round" stroke-dasharray="615.75" stroke-dashoffset="0"/>
+          </svg>
+          <div class="dial-txt">
+            <div class="dial-time num" id="clock">25:00</div>
+            <div class="dial-sub" id="clockSub">第 1 个番茄</div>
+          </div>
+        </div>
+
+        <div class="ctrls">
+          <button class="btn primary" id="btnStart">开始</button>
+          <button class="btn ghost" id="btnReset" title="重置本轮">↺</button>
+          <button class="btn ghost" id="btnSkip" title="跳到下一阶段">↦</button>
+        </div>
+
+        <div class="hint">
+          <kbd>空格</kbd> 开始 / 暂停 · <kbd>R</kbd> 重置 · <kbd>S</kbd> 跳过<br>
+          一个番茄 +12 XP / +1 钻石
+        </div>
+      </div>
+
+      <!-- 统计 + 设置 -->
+      <div class="card stats-card">
+        <div class="card-title">今日</div>
+        <div class="stat-row">
+          <div class="stat a"><b class="num" id="todayPomo">0</b><span>番茄数</span></div>
+          <div class="stat b"><b class="num" id="todayMin">0</b><span>专注分钟</span></div>
+          <div class="stat c"><b class="num" id="streak">0</b><span>连续天数</span></div>
+          <div class="stat d"><b class="num" id="totalPomo">0</b><span>累计番茄</span></div>
+        </div>
+
+        <div>
+          <div class="card-title" style="margin-bottom:5px">最近 14 天</div>
+          <div class="chart" id="chart"></div>
+          <div class="chart-foot"><span id="chartFrom">—</span><span>今天</span></div>
+        </div>
+
+        <div>
+          <div class="card-title" id="setToggle" style="margin-bottom:0;cursor:pointer">设置 <span class="tag" id="setHint">展开</span></div>
+          <div id="setBody" style="display:none">
+          <div class="set-row"><span>专注时长（分）</span><input type="number" id="setFocus" min="1" max="180"></div>
+          <div class="set-row"><span>短休时长（分）</span><input type="number" id="setShort" min="1" max="60"></div>
+          <div class="set-row"><span>长休时长（分）</span><input type="number" id="setLong" min="1" max="90"></div>
+          <div class="set-row"><span>每几个番茄长休</span><input type="number" id="setEvery" min="2" max="12"></div>
+          <div class="set-row"><span>自动进入下一阶段</span><button class="sw" id="swAuto"></button></div>
+          <div class="set-row"><span>结束提示音</span><button class="sw" id="swSound"></button></div>
+          <div class="set-row"><span>专注时自动开始混音</span><button class="sw" id="swAutoAudio"></button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 三列 ══ -->
+  <div class="grid3">
+
+    <div class="card">
+      <div class="card-title">复习进度 · 总进度 <span id="overallPct" style="color:var(--focus);margin-left:auto;letter-spacing:0">0%</span></div>
+      <div id="subjects"></div>
+      <div class="foot" style="text-align:left;padding-top:8px">
+        <button id="btnResetProgress">重置全部进度</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">成就 <span id="achCount" style="margin-left:auto;letter-spacing:0;color:var(--tx-3)">0 / 24</span></div>
+      <div class="ach-grid" id="achievements"></div>
+    </div>
+  </div>
+
+  <div class="card share">
+    <div>
+      <h4>把这个房间分享出去</h4>
+      <p id="shareIntro">一个不联网的番茄钟。点开始，25 分钟后它会响；每完成一个番茄，桌上那盆绿植就长大一点，
+攒下的钻石可以往鱼缸里添条鱼，或者给她换顶帽子。六个场景随等级解锁，从深夜书桌一直到星际舱。
+环境音是现场算出来的，不加载任何音频文件——雨、篝火、风、键盘、咖啡馆六条音轨各自调音量，
+也能让它按场景自动配好。</p>
+      <div class="urlrow">
+        <code id="siteUrl">https://walkinthrufire.github.io/kaoyan-focus/</code>
+        <button class="ibtn" id="btnCopyUrl">复制链接</button>
+        <button class="ibtn" id="btnCopyTxt">复制介绍</button>
+      </div>
+    </div>
+    <div class="dl-list">
+      <a class="dl-btn" target="_blank" rel="noopener"
+         href="https://walkinthrufire.github.io/kaoyan-focus/KaoyanFocus.exe">
+        <span class="dl-ico">&#11015;</span>
+        <span><b>Windows 桌面版</b><em>KaoyanFocus.exe · 17 MB · 双击即用</em></span>
+      </a>
+      <a class="dl-btn" target="_blank" rel="noopener"
+         href="https://walkinthrufire.github.io/kaoyan-focus/index.html">
+        <span class="dl-ico">&#11015;</span>
+        <span><b>离线网页版</b><em>单个 HTML 文件 · 130 KB · 存下来双击就行</em></span>
+      </a>
+      <a class="dl-btn" target="_blank" rel="noopener"
+         href="https://walkinthrufire.github.io/esports-hub/">
+        <span class="dl-ico">&#8599;</span>
+        <span><b>赛事分析工坊</b><em>同一个作者的电竞数据分析站点</em></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="foot">
+    数据存在本机 · <button id="btnExport">导出备份</button> · <button id="btnImport">导入备份</button> · <button id="btnClear">清空全部数据</button>
+    <input type="file" id="fileImport" accept=".json" style="display:none">
+  </div>
+</div>
+
+<!-- ══ 面板 ══ -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="mTitle">装扮商店</h3>
+      <div class="sub" id="mSub"></div>
+      <button class="x" id="mClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="tabs" id="mTabs">
+        <button class="tab on" data-pane="shop">装扮商店</button>
+        <button class="tab" data-pane="brew">饮品台</button>
+        <button class="tab" data-pane="phone">手机</button>
+        <button class="tab" data-pane="memo">便签 · 日记</button>
+      </div>
+
+      <div class="pane on" id="pane-shop">
+        <div class="shop-grid" id="shopGrid"></div>
+        <div style="margin-top:16px">
+          <div class="card-title">鱼缸 · 越养越值钱</div>
+          <div class="shop-grid" id="fishGrid"></div>
+        </div>
+      </div>
+
+      <div class="pane" id="pane-brew">
+        <div class="brew-grid">
+          <div class="brew-pick">
+            <div class="brew-lab">基底</div>
+            <div id="brewBase"></div>
+          </div>
+          <div class="brew-pick">
+            <div class="brew-lab">加料</div>
+            <div id="brewAdd"></div>
+          </div>
+        </div>
+        <div style="margin-top:14px">
+          <div class="brew-out" id="brewOut">
+            <div class="bo-cup">☕</div>
+            <div class="bo-n">选一个基底和一个加料</div>
+            <div class="bo-d">调过的组合会记进配方册。首次调出 +20 XP +5 钻石。</div>
+          </div>
+        </div>
+        <div class="card-title" style="margin-top:18px">配方册 <span id="recCount" style="margin-left:auto;letter-spacing:0;color:var(--tx-3)">0 / 12</span></div>
+        <div class="rec-grid" id="recGrid"></div>
+      </div>
+
+      <div class="pane" id="pane-phone">
+        <div class="phone" id="phoneList"></div>
+      </div>
+
+      <div class="pane" id="pane-memo">
+        <div class="card-title">便签墙 · 点击编辑</div>
+        <div class="stickies" id="stickies"></div>
+        <div class="card-title" style="margin-top:20px">每日一句</div>
+        <div class="task-add">
+          <input id="diaryInput" placeholder="今天想留一句话…" maxlength="90">
+          <button id="diaryAdd" title="记下">+</button>
+        </div>
+        <div id="diaryList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 自建对话框（替代原生 confirm / prompt） ══ -->
+<div class="modal" id="dlg">
+  <div class="modal-box" style="max-width:430px">
+    <div class="modal-head"><h3 id="dlgTitle">提示</h3><button class="x" id="dlgClose">×</button></div>
+    <div class="modal-body">
+      <div id="dlgMsg" style="font-size:13px;color:var(--tx-2);line-height:1.7"></div>
+      <input id="dlgInput" maxlength="120" style="display:none;width:100%;margin-top:13px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:9px;padding:10px 12px;color:var(--tx);font-family:var(--font);font-size:13px;outline:none">
+      <div style="display:flex;gap:9px;justify-content:flex-end;margin-top:18px">
+        <button class="btn ghost" id="dlgNo" style="padding:9px 18px">取消</button>
+        <button class="btn primary" id="dlgYes" style="padding:9px 22px">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+"use strict";
+
+/* ═══════════════════════════════════════════════════════════
+   一、场景绘制（viewBox 0 0 560 300）
+   桌面基线 y=206，桌面以下为桌子正面；窗在右上；角色坐在桌后。
+   ═══════════════════════════════════════════════════════════ */
+
+const V = { w:560, h:266, deskY:206 };
+
+/* ── 场景元数据 ── */
+const SCENES = [
+  { id:"desk", name:"深夜书桌", lv:1, accent:"#FF7A45", coat:"#3A4A63",
+    desc:"台灯、旧书、一盆刚种下的绿。考研的第一年从这里开始。",
+    ambience:{ rain:22, fire:0, wind:0, cafe:0, keys:0, crickets:12 } },
+  { id:"changan", name:"长安书房", lv:3, accent:"#E0A34A", coat:"#C9B489",
+    desc:"月洞窗外是长安的月亮。案上有笔有砚，还有一杯凉了的茶。",
+    ambience:{ rain:0, fire:0, wind:16, cafe:0, keys:0, crickets:34 } },
+  { id:"neon", name:"霓虹自习室", lv:6, accent:"#FF4FD8", coat:"#2B2340",
+    desc:"凌晨的高架桥还在响。窗外下着雨，霓虹把书页染成粉色。",
+    ambience:{ rain:52, fire:0, wind:0, cafe:26, keys:18, crickets:0 } },
+  { id:"cabin", name:"林间木屋", lv:10, accent:"#E8874A", lamp:false, coat:"#4A382C",
+    desc:"壁炉烧着柴。木屋外面是松林和雪，屋里只有你和一杯热的。",
+    ambience:{ rain:0, fire:58, wind:24, cafe:0, keys:0, crickets:0 } },
+  { id:"library", name:"雪日图书室", lv:15, accent:"#78B4DE", lamp:false, coat:"#2E4256",
+    desc:"三楼靠窗的位置没人抢。外面雪下得很大，纸页翻动的声音很轻。",
+    ambience:{ rain:0, fire:0, wind:20, cafe:38, keys:22, crickets:0 } },
+  { id:"space", name:"星际舱", lv:22, accent:"#5FE3FF", lamp:false, coat:"#1E3A4A",
+    desc:"舷窗外是 400 公里外的地球。这里安静得只剩仪器在运转。",
+    ambience:{ rain:0, fire:0, wind:30, cafe:0, keys:16, crickets:0 } }
+];
+const SCENE_BY_ID = {};
+SCENES.forEach(s => SCENE_BY_ID[s.id] = s);
+
+/* ── 公用：窗框 ── */
+function winFrame(x, y, w, h, frame, cross){
+  let s = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="4" fill="' + frame.bg + '" stroke="' + frame.line + '" stroke-width="2"/>';
+  if(cross !== false){
+    s += '<line x1="' + (x + w / 2) + '" y1="' + y + '" x2="' + (x + w / 2) + '" y2="' + (y + h) + '" stroke="' + frame.line + '" stroke-width="2"/>';
+    s += '<line x1="' + x + '" y1="' + (y + h / 2) + '" x2="' + (x + w) + '" y2="' + (y + h / 2) + '" stroke="' + frame.line + '" stroke-width="2"/>';
+  }
+  return s;
+}
+
+/* ── 公用：桌面 ── */
+function deskSurface(top, front, line){
+  return '<rect x="0" y="' + V.deskY + '" width="560" height="7" fill="' + top + '"/>' +
+         '<rect x="0" y="' + (V.deskY + 7) + '" width="560" height="53" fill="' + front + '"/>' +
+         '<line x1="0" y1="' + (V.deskY + 7) + '" x2="560" y2="' + (V.deskY + 7) + '" stroke="' + line + '" stroke-width="1.5"/>';
+}
+
+/* ── 公用：光锥（顶层） ── */
+function lightCone(accent, strength){
+  return '<path d="M88 52 L28 ' + V.deskY + ' L206 ' + V.deskY + ' Z" fill="' + accent + '" opacity="' + (strength || 0.07) + '"/>' +
+         '<ellipse cx="117" cy="' + V.deskY + '" rx="88" ry="9" fill="' + accent + '" opacity="0.07"/>';
+}
+
+/* ══ 场景 1 · 深夜书桌 ══ */
+function bgDesk(){
+  return '<defs>' +
+    '<linearGradient id="gDesk" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#121826"/><stop offset="100%" stop-color="#0A0E18"/></linearGradient>' +
+    '<radialGradient id="gMoon" cx="50%" cy="50%"><stop offset="0%" stop-color="#F5C451" stop-opacity=".45"/><stop offset="100%" stop-color="#F5C451" stop-opacity="0"/></radialGradient>' +
+    '</defs>' +
+    '<rect width="560" height="300" fill="url(#gDesk)"/>' +
+    '<rect y="' + V.deskY + '" width="560" height="60" fill="#0E121C"/>' +
+    winFrame(372, 30, 156, 132, { bg:"#0A1120", line:"#28323F" }) +
+    '<circle cx="492" cy="70" r="34" fill="url(#gMoon)"/>' +
+    '<circle cx="492" cy="70" r="15" fill="#F5C451" opacity=".8"/>' +
+    '<circle cx="492" cy="70" r="15" fill="#0A1120" opacity=".2"/>' +
+    '<circle cx="404" cy="52" r="1.6" fill="#8A93A6" opacity=".6" class="twinkle"/>' +
+    '<circle cx="428" cy="96" r="1.3" fill="#8A93A6" opacity=".45" class="twinkle"/>' +
+    '<circle cx="512" cy="126" r="1.5" fill="#8A93A6" opacity=".5" class="twinkle"/>' +
+    '<circle cx="450" cy="140" r="1.2" fill="#8A93A6" opacity=".35"/>' +
+    '<rect x="0" y="188" width="560" height="18" fill="#0C111B"/>' +
+    '<line x1="0" y1="188" x2="560" y2="188" stroke="#1C2636" stroke-width="1.4"/>';
+}
+
+/* ══ 场景 2 · 长安书房 ══ */
+function bgChangan(){
+  let s = '<defs>' +
+    '<linearGradient id="gCa" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#241A11"/><stop offset="100%" stop-color="#150F08"/></linearGradient>' +
+    '<radialGradient id="gCaMoon" cx="50%" cy="50%"><stop offset="0%" stop-color="#E0A34A" stop-opacity=".38"/><stop offset="100%" stop-color="#E0A34A" stop-opacity="0"/></radialGradient>' +
+    '</defs>' +
+    '<rect width="560" height="300" fill="url(#gCa)"/>' +
+    '<rect y="' + V.deskY + '" width="560" height="60" fill="#191208"/>';
+  // 月洞窗
+  s += '<circle cx="452" cy="100" r="70" fill="#100C06" stroke="#4A3820" stroke-width="7"/>';
+  s += '<circle cx="452" cy="100" r="66" fill="#0C0904"/>';
+  s += '<circle cx="452" cy="82" r="30" fill="url(#gCaMoon)"/>';
+  s += '<circle cx="452" cy="82" r="16" fill="#E0A34A" opacity=".85"/>';
+  s += '<path d="M398 142 L420 108 L438 130 L458 100 L486 142 Z" fill="#1C1409"/>';
+  s += '<path d="M398 146 H506" stroke="#2A1F12" stroke-width="3"/>';
+  s += '<circle cx="486" cy="126" r="1.6" fill="#E0A34A" opacity=".5" class="twinkle"/>';
+  // 月洞窗的窗棂（裁进圆内，不糊到墙上）
+  s += '<defs><clipPath id="cWin"><circle cx="452" cy="100" r="65"/></clipPath></defs>' +
+       '<g clip-path="url(#cWin)" opacity=".6" stroke="#4A3820" stroke-width="1.6">' +
+       '<line x1="452" y1="24" x2="452" y2="176"/>' +
+       '<line x1="374" y1="100" x2="530" y2="100"/>' +
+       '<line x1="412" y1="24" x2="412" y2="176"/>' +
+       '<line x1="492" y1="24" x2="492" y2="176"/>' +
+       '<line x1="374" y1="52" x2="530" y2="52"/>' +
+       '<line x1="374" y1="148" x2="530" y2="148"/>' +
+       '</g>';
+  // 卷轴
+  s += '<rect x="120" y="42" width="52" height="116" rx="2" fill="#C9B489" opacity=".9"/>' +
+       '<rect x="120" y="42" width="52" height="116" rx="2" fill="none" stroke="#8E7C56" stroke-width="1.4"/>' +
+       '<rect x="116" y="36" width="60" height="8" rx="3" fill="#6E4A2A"/>' +
+       '<rect x="116" y="156" width="60" height="8" rx="3" fill="#6E4A2A"/>';
+  s += '<g opacity=".55" stroke="#4A3A22" stroke-width="1.4">' +
+       '<line x1="132" y1="66" x2="160" y2="66"/><line x1="132" y1="80" x2="160" y2="80"/>' +
+       '<line x1="132" y1="94" x2="152" y2="94"/><line x1="132" y1="108" x2="160" y2="108"/>' +
+       '<line x1="132" y1="122" x2="156" y2="122"/></g>';
+  // 灯笼
+  s += '<line x1="212" y1="0" x2="212" y2="26" stroke="#3A2C1A" stroke-width="2"/>' +
+       '<ellipse cx="212" cy="44" rx="21" ry="19" fill="#7A2418" opacity=".92"/>' +
+       '<ellipse cx="212" cy="44" rx="21" ry="19" fill="#E05A3A" opacity=".28"/>' +
+       '<ellipse cx="212" cy="44" rx="8" ry="19" fill="#FF8A5A" opacity=".22"/>' +
+       '<rect x="200" y="61" width="24" height="5" rx="2" fill="#6E4A2A"/>' +
+       '<line x1="212" y1="66" x2="212" y2="78" stroke="#C9B489" stroke-width="1.4"/>' +
+       '<circle cx="212" cy="44" r="30" fill="#E05A3A" opacity=".07"/>';
+  s += '<rect x="0" y="196" width="560" height="10" fill="#1E1610"/>';
+  return s;
+}
+
+/* ══ 场景 3 · 霓虹自习室 ══ */
+function bgNeon(){
+  let s = '<defs>' +
+    '<linearGradient id="gNe" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#12142C"/><stop offset="100%" stop-color="#080A18"/></linearGradient>' +
+    '<linearGradient id="gNeon1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FF4FD8"/><stop offset="100%" stop-color="#7A2AB0"/></linearGradient>' +
+    '<linearGradient id="gNeon2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#22D3EE"/><stop offset="100%" stop-color="#1A6E8A"/></linearGradient>' +
+    '</defs>' +
+    '<rect width="560" height="300" fill="url(#gNe)"/>' +
+    '<rect y="' + V.deskY + '" width="560" height="60" fill="#0A0C1A"/>';
+  // 落地窗
+  s += '<rect x="356" y="20" width="190" height="164" rx="3" fill="#070A16" stroke="#2A2F52" stroke-width="2.4"/>';
+  s += '<line x1="451" y1="20" x2="451" y2="184" stroke="#2A2F52" stroke-width="2"/>';
+  s += '<line x1="356" y1="102" x2="546" y2="102" stroke="#2A2F52" stroke-width="2"/>';
+  // 窗外高楼
+  s += '<g opacity=".95">';
+  const bld = [[366,96,34,88],[404,60,28,124],[436,110,32,74],[472,44,34,140],[510,86,30,98]];
+  bld.forEach((b, i) => { s += '<rect x="' + b[0] + '" y="' + b[1] + '" width="' + b[2] + '" height="' + b[3] + '" fill="#141A32"/>'; });
+  s += '</g>';
+  // 楼里的灯
+  for(let i = 0; i < 22; i++){
+    const bx = 370 + (i % 6) * 30, by = 108 + Math.floor(i / 6) * 22;
+    if(bx < 536 && by < 176) s += '<rect x="' + bx + '" y="' + by + '" width="4" height="5" fill="#22D3EE" opacity="' + (0.25 + (i % 4) * 0.18) + '"/>';
+  }
+  // 霓虹竖牌
+  s += '<rect x="482" y="52" width="12" height="70" rx="3" fill="url(#gNeon1)" opacity=".92"/>';
+  s += '<rect x="482" y="52" width="12" height="70" rx="3" fill="#FF4FD8" opacity=".3"/>';
+  s += '<rect x="500" y="80" width="10" height="52" rx="3" fill="url(#gNeon2)" opacity=".85"/>';
+  s += '<rect x="474" y="46" width="30" height="84" rx="6" fill="#FF4FD8" opacity=".13"/>';
+  // 雨丝
+  s += '<g stroke="#8FD8E8" stroke-width="1" opacity=".3">';
+  for(let i = 0; i < 26; i++){
+    const x = 358 + (i * 37) % 186, y = 22 + (i * 53) % 158;
+    s += '<line x1="' + x + '" y1="' + y + '" x2="' + (x - 3) + '" y2="' + (y + 12) + '"/>';
+  }
+  s += '</g>';
+  // 墙上霓虹管
+  s += '<rect x="40" y="76" width="150" height="6" rx="3" fill="#FF4FD8" opacity=".72"/>' +
+       '<rect x="26" y="66" width="178" height="26" rx="8" fill="#FF4FD8" opacity=".09"/>' +
+       '<rect x="70" y="164" width="112" height="5" rx="2.5" fill="#22D3EE" opacity=".6"/>' +
+       '<rect x="56" y="154" width="140" height="25" rx="8" fill="#22D3EE" opacity=".08"/>';
+  // 全息屏
+  s += '<rect x="196" y="16" width="92" height="60" rx="5" fill="#0C1A24" stroke="#22D3EE" stroke-width="1.6" opacity=".95"/>' +
+       '<g opacity=".8">' +
+       '<rect x="206" y="28" width="52" height="4" rx="2" fill="#22D3EE"/>' +
+       '<rect x="206" y="40" width="70" height="3" rx="1.5" fill="#22D3EE" opacity=".6"/>' +
+       '<rect x="206" y="48" width="44" height="3" rx="1.5" fill="#22D3EE" opacity=".6"/>' +
+       '<rect x="206" y="58" width="60" height="3" rx="1.5" fill="#22D3EE" opacity=".4"/>' +
+       '</g>' +
+       '<rect x="188" y="8" width="108" height="78" rx="9" fill="#22D3EE" opacity=".07"/>';
+  s += '<rect x="0" y="184" width="560" height="22" fill="#0B0E1E"/>' +
+       '<line x1="0" y1="184" x2="560" y2="184" stroke="#232A4A" stroke-width="1.4"/>';
+  return s;
+}
+
+/* ══ 场景 4 · 林间木屋 ══ */
+function bgCabin(){
+  let s = '<defs>' +
+    '<linearGradient id="gCab" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2A1F15"/><stop offset="100%" stop-color="#160F0A"/></linearGradient>' +
+    '<radialGradient id="gFire" cx="50%" cy="60%"><stop offset="0%" stop-color="#F5A451" stop-opacity=".5"/><stop offset="100%" stop-color="#E8874A" stop-opacity="0"/></radialGradient>' +
+    '</defs>' +
+    '<rect width="560" height="300" fill="url(#gCab)"/>' +
+    '<rect y="' + V.deskY + '" width="560" height="60" fill="#171009"/>';
+  // 原木墙
+  s += '<g opacity=".5">';
+  for(let y = 12; y < 200; y += 22){
+    s += '<line x1="0" y1="' + y + '" x2="560" y2="' + y + '" stroke="#3A2A1C" stroke-width="1.6"/>';
+    s += '<circle cx="' + (60 + (y * 7) % 420) + '" cy="' + (y + 11) + '" r="2.4" fill="#43301F" opacity=".7"/>';
+  }
+  s += '</g>';
+  // 窗
+  s += winFrame(384, 32, 140, 130, { bg:"#0A1018", line:"#2C2115" });
+  s += '<path d="M384 130 L414 92 L436 116 L462 74 L492 106 L524 82 L524 162 L384 162 Z" fill="#111A16"/>';
+  s += '<path d="M396 130 L420 106 L446 128 L472 100 L500 124 L524 108 L524 162 L396 162 Z" fill="#1A2A22"/>';
+  s += '<g fill="#E8F2F5" opacity=".75">';
+  for(let i = 0; i < 16; i++){
+    const x = 390 + (i * 43) % 130, y = 40 + (i * 61) % 118;
+    s += '<circle cx="' + x + '" cy="' + y + '" r="1.5" class="twinkle"/>';
+  }
+  s += '</g>';
+  // 壁炉
+  s += '<rect x="52" y="118" width="96" height="88" rx="5" fill="#231812"/>' +
+       '<rect x="52" y="118" width="96" height="88" rx="5" fill="none" stroke="#3E2C1E" stroke-width="2.4"/>' +
+       '<path d="M64 206 L64 150 Q100 128 136 150 L136 206 Z" fill="#120C08"/>' +
+       '<path d="M78 206 Q86 172 100 160 Q114 174 122 206 Z" fill="#E8874A" opacity=".9"/>' +
+       '<path d="M88 206 Q95 184 100 176 Q106 186 112 206 Z" fill="#F5C451" opacity=".85"/>' +
+       '<rect x="44" y="108" width="112" height="12" rx="3" fill="#3E2C1E"/>' +
+       '<circle cx="100" cy="170" r="58" fill="url(#gFire)"/>';
+  // 火星
+  s += '<circle cx="94" cy="146" r="2" fill="#F5C451" opacity=".8" class="ember"/>' +
+       '<circle cx="110" cy="132" r="1.6" fill="#FFA870" opacity=".7" class="ember" style="animation-delay:.8s"/>' +
+       '<circle cx="102" cy="120" r="1.3" fill="#F5C451" opacity=".6" class="ember" style="animation-delay:1.6s"/>';
+  // 挂灯
+  s += '<line x1="292" y1="0" x2="292" y2="22" stroke="#3E2C1E" stroke-width="2"/>' +
+       '<path d="M272 22 L312 22 L306 44 L278 44 Z" fill="#4A382C"/>' +
+       '<circle cx="292" cy="52" r="8" fill="#F5A451" opacity=".92"/>' +
+       '<circle cx="292" cy="52" r="22" fill="#F5A451" opacity=".11"/>';
+  s += '<rect x="0" y="192" width="560" height="14" fill="#1E1610"/>';
+  return s;
+}
+
+/* ══ 场景 5 · 雪日图书室 ══ */
+function bgLibrary(){
+  let s = '<defs>' +
+    '<linearGradient id="gLib" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1A2634"/><stop offset="100%" stop-color="#0D141C"/></linearGradient>' +
+    '<radialGradient id="gLamp" cx="50%" cy="30%"><stop offset="0%" stop-color="#F5C451" stop-opacity=".3"/><stop offset="100%" stop-color="#F5C451" stop-opacity="0"/></radialGradient>' +
+    '</defs>' +
+    '<rect width="560" height="300" fill="url(#gLib)"/>' +
+    '<rect y="' + V.deskY + '" width="560" height="60" fill="#0F171F"/>';
+  // 书架
+  s += '<rect x="18" y="26" width="140" height="180" rx="4" fill="#2A2018"/>' +
+       '<rect x="18" y="26" width="140" height="180" rx="4" fill="none" stroke="#3C2E22" stroke-width="2"/>';
+  const books = ["#8A5A4A","#4A6A8A","#7A6A3A","#5A4A7A","#3A6A5A","#8A7A4A","#6A3A4A"];
+  for(let r = 0; r < 4; r++){
+    const by = 34 + r * 43;
+    for(let i = 0; i < 11; i++){
+      const bx = 24 + i * 12;
+      const bh = 26 + ((i * 7 + r * 5) % 9);
+      s += '<rect x="' + bx + '" y="' + (by + 33 - bh) + '" width="9" height="' + bh + '" rx="1.5" fill="' + books[(i + r) % books.length] + '" opacity=".82"/>';
+    }
+    s += '<rect x="18" y="' + (by + 35) + '" width="140" height="5" fill="#3C2E22"/>';
+  }
+  // 拱窗
+  s += '<path d="M376 168 L376 84 Q376 40 452 40 Q528 40 528 84 L528 168 Z" fill="#101A26" stroke="#2C3A48" stroke-width="3"/>';
+  s += '<line x1="452" y1="41" x2="452" y2="168" stroke="#2C3A48" stroke-width="2.4"/>';
+  s += '<line x1="377" y1="104" x2="527" y2="104" stroke="#2C3A48" stroke-width="2.4"/>';
+  s += '<path d="M380 150 L410 118 L436 138 L466 106 L500 134 L524 118 L524 166 L380 166 Z" fill="#1C2C3A"/>';
+  s += '<g fill="#E6F0F8" opacity=".8">';
+  for(let i = 0; i < 22; i++){
+    const x = 382 + (i * 47) % 142, y = 46 + (i * 71) % 116;
+    s += '<circle cx="' + x + '" cy="' + y + '" r="' + (1.2 + (i % 3) * 0.5) + '" class="twinkle" style="animation-delay:' + (i * 0.2) + 's"/>';
+  }
+  s += '</g>';
+  // 吊灯
+  s += '<line x1="248" y1="0" x2="248" y2="34" stroke="#2C3A48" stroke-width="2"/>' +
+       '<path d="M226 34 L270 34 L262 56 L234 56 Z" fill="#3A4A58"/>' +
+       '<circle cx="248" cy="64" r="9" fill="#F5C451" opacity=".9"/>' +
+       '<circle cx="248" cy="64" r="44" fill="url(#gLamp)"/>';
+  s += '<rect x="0" y="198" width="560" height="8" fill="#1B2632"/>';
+  return s;
+}
+
+/* ══ 场景 6 · 星际舱 ══ */
+function bgSpace(){
+  let s = '<defs>' +
+    '<linearGradient id="gSp" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#111C30"/><stop offset="100%" stop-color="#070B14"/></linearGradient>' +
+    '<radialGradient id="gPorthole" cx="50%" cy="50%"><stop offset="0%" stop-color="#5FE3FF" stop-opacity=".18"/><stop offset="100%" stop-color="#5FE3FF" stop-opacity="0"/></radialGradient>' +
+    '<radialGradient id="gPlanet" cx="35%" cy="32%"><stop offset="0%" stop-color="#6FA8D8"/><stop offset="70%" stop-color="#2A4A72"/><stop offset="100%" stop-color="#16283E"/></radialGradient>' +
+    '</defs>' +
+    '<rect width="560" height="300" fill="url(#gSp)"/>' +
+    '<rect y="' + V.deskY + '" width="560" height="60" fill="#0A1120"/>';
+  // 舱壁板
+  s += '<g opacity=".55" stroke="#1E2C44" stroke-width="1.6">';
+  for(let x = 0; x < 560; x += 70) s += '<line x1="' + x + '" y1="0" x2="' + x + '" y2="206"/>';
+  for(let y = 0; y < 206; y += 52) s += '<line x1="0" y1="' + y + '" x2="560" y2="' + y + '"/>';
+  s += '</g>';
+  s += '<g fill="#243450">';
+  for(let x = 18; x < 560; x += 70){ for(let y = 16; y < 200; y += 52){ s += '<circle cx="' + x + '" cy="' + y + '" r="2"/>'; } }
+  s += '</g>';
+  // 舷窗
+  s += '<circle cx="452" cy="100" r="66" fill="#04060E" stroke="#2E4468" stroke-width="8"/>' +
+       '<circle cx="452" cy="100" r="60" fill="#05070F"/>';
+  s += '<g fill="#E4F2FA">';
+  for(let i = 0; i < 26; i++){
+    const a = i * 2.399, r = 8 + (i * 7) % 50;
+    const x = 452 + Math.cos(a) * r, y = 100 + Math.sin(a) * r;
+    if(Math.hypot(x - 452, y - 100) < 58) s += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + (0.8 + (i % 3) * 0.5) + '" class="twinkle" style="animation-delay:' + (i * 0.15).toFixed(1) + 's"/>';
+  }
+  s += '</g>';
+  s += '<circle cx="428" cy="126" r="26" fill="url(#gPlanet)"/>';
+  s += '<path d="M404 116 Q428 108 452 118" stroke="#8FC4E8" stroke-width="1.4" fill="none" opacity=".45"/>';
+  s += '<path d="M410 136 Q432 146 450 138" stroke="#8FC4E8" stroke-width="1.2" fill="none" opacity=".35"/>';
+  s += '<circle cx="452" cy="100" r="78" fill="url(#gPorthole)"/>';
+  // 仪表盘
+  s += '<rect x="42" y="72" width="152" height="86" rx="7" fill="#0B1526" stroke="#233A5A" stroke-width="2"/>';
+  const lights = ["#5FE3FF","#3DDC97","#F5C451","#FF7A45"];
+  for(let r = 0; r < 2; r++){ for(let c = 0; c < 6; c++){
+    const lx = 58 + c * 22, ly = 92 + r * 26;
+    const on = (r * 6 + c) % 3 !== 0;
+    s += '<circle cx="' + lx + '" cy="' + ly + '" r="4.5" fill="' + (on ? lights[(r + c) % 4] : "#1B2A40") + '" opacity="' + (on ? .95 : 1) + '"/>';
+    if(on) s += '<circle cx="' + lx + '" cy="' + ly + '" r="10" fill="' + lights[(r + c) % 4] + '" opacity=".13"/>';
+  } }
+  s += '<rect x="52" y="140" width="132" height="5" rx="2.5" fill="#1E3350"/>' +
+       '<rect x="52" y="140" width="86" height="5" rx="2.5" fill="#5FE3FF" opacity=".8"/>';
+  // 管线
+  s += '<path d="M212 24 Q260 44 250 88" stroke="#243450" stroke-width="5" fill="none" stroke-linecap="round"/>' +
+       '<path d="M330 14 Q316 64 352 96" stroke="#243450" stroke-width="4" fill="none" stroke-linecap="round"/>';
+  s += '<rect x="0" y="192" width="560" height="14" fill="#0D1626"/>' +
+       '<line x1="0" y1="192" x2="560" y2="192" stroke="#25324A" stroke-width="1.6"/>';
+  return s;
+}
+
+const BG_FN = { desk:bgDesk, changan:bgChangan, neon:bgNeon, cabin:bgCabin, library:bgLibrary, space:bgSpace };
+
+/* ══ 角色 ══ */
+function person(scene){
+  const coat = scene.coat;
+  const dark = "rgba(0,0,0,.22)";
+  let s = '<g class="pv">';
+  // 肩臂（后层）
+  s += '<path d="M244 158 L220 200" stroke="' + coat + '" stroke-width="15" stroke-linecap="round"/>';
+  s += '<path d="M296 158 L320 200" stroke="' + coat + '" stroke-width="15" stroke-linecap="round"/>';
+  // 脖子
+  s += '<rect x="264" y="136" width="12" height="12" rx="3" fill="#D9A87F"/>';
+  // 头
+  s += '<rect x="250" y="100" width="40" height="42" rx="9" fill="#F2CBA6"/>';
+  // 头发
+  s += '<path d="M248 112 Q250 92 270 92 Q290 92 292 112 L292 120 Q284 108 270 108 Q256 108 248 120 Z" fill="#2E2419"/>';
+  s += '<rect x="246" y="106" width="7" height="24" rx="3.5" fill="#2E2419"/>';
+  s += '<rect x="287" y="106" width="7" height="24" rx="3.5" fill="#2E2419"/>';
+  // 眼睛
+  s += '<rect class="eye-open" x="258" y="120" width="4.5" height="6" rx="2" fill="#3A2E22"/>';
+  s += '<rect class="eye-open" x="277.5" y="120" width="4.5" height="6" rx="2" fill="#3A2E22"/>';
+  // 嘴
+  s += '<rect x="266" y="131" width="8" height="2.2" rx="1.1" fill="' + dark + '"/>';
+  // 眼镜（专注感）
+  s += '<g opacity=".75" fill="none" stroke="#4A3A2A" stroke-width="1.3">' +
+       '<rect x="255" y="117" width="10" height="11" rx="3"/>' +
+       '<rect x="275" y="117" width="10" height="11" rx="3"/>' +
+       '<line x1="265" y1="122" x2="275" y2="122"/></g>';
+  // 头饰
+  s += headwear();
+  s += '</g>';
+  // 手臂（前层，写字的手）
+  s += '<g class="pv-arm"><path d="M236 186 L252 200" stroke="#F2CBA6" stroke-width="9" stroke-linecap="round"/>' +
+       '<path d="M304 186 L290 200" stroke="#F2CBA6" stroke-width="9" stroke-linecap="round"/></g>';
+  return s;
+}
+
+function headwear(){
+  const own = D.decor || [];
+  let s = "";
+  if(own.indexOf("horns") >= 0){
+    s += '<g fill="#C9A06A">' +
+         '<path d="M252 104 L240 84 L252 92 Z"/><path d="M240 84 L236 76 L246 82 Z"/>' +
+         '<path d="M288 104 L300 84 L288 92 Z"/><path d="M300 84 L304 76 L294 82 Z"/></g>';
+  }
+  if(own.indexOf("band") >= 0){
+    s += '<rect x="244" y="112" width="52" height="5" rx="2.5" fill="' + (SCENE_BY_ID[D.scene] || SCENES[0]).accent + '"/>' +
+         '<path d="M244 114 L232 106 L232 122 Z" fill="' + (SCENE_BY_ID[D.scene] || SCENES[0]).accent + '" opacity=".85"/>';
+  }
+  if(own.indexOf("beanie") >= 0){
+    s += '<path d="M246 108 Q248 86 270 86 Q292 86 294 108 Z" fill="#B8523F"/>' +
+         '<rect x="244" y="104" width="52" height="9" rx="4" fill="#D26A55"/>' +
+         '<circle cx="270" cy="82" r="6" fill="#E8A88F"/>';
+  }
+  if(own.indexOf("headset") >= 0){
+    s += '<path d="M244 118 Q244 92 270 92 Q296 92 296 118" fill="none" stroke="#3A4658" stroke-width="4"/>' +
+         '<rect x="238" y="112" width="9" height="17" rx="4" fill="#3A4658"/>' +
+         '<rect x="293" y="112" width="9" height="17" rx="4" fill="#3A4658"/>' +
+         '<circle cx="242.5" cy="120" r="2" fill="' + (SCENE_BY_ID[D.scene] || SCENES[0]).accent + '"/>';
+  }
+  return s;
+}
+
+/* ══ 盆栽（随番茄数成长） ══ */
+const PLANT_STAGES = [
+  { min:0,   name:"一捧土" },
+  { min:1,   name:"破土" },
+  { min:10,  name:"抽芽" },
+  { min:30,  name:"展叶" },
+  { min:80,  name:"结蕾" },
+  { min:160, name:"开花" },
+  { min:320, name:"成荫" }
+];
+
+function plant(){
+  const n = D.total.pomodoros || 0;
+  let s = '<g id="plant">';
+  s += '<path d="M236 206 L232 187 L268 187 L264 206 Z" fill="#7A4A2E"/>' +
+       '<rect x="229" y="182" width="42" height="7" rx="2.5" fill="#96593A"/>' +
+       '<rect x="229" y="182" width="42" height="2.5" rx="1.2" fill="#B06A45"/>';
+  const G = "#3DDC97";
+  if(n >= 1){
+    s += '<path d="M250 182 L250 168" stroke="' + G + '" stroke-width="2.6" stroke-linecap="round"/>' +
+         '<path d="M250 174 L242 168" stroke="' + G + '" stroke-width="2.1" stroke-linecap="round"/>';
+  }
+  if(n >= 10){
+    s += '<path d="M250 178 L250 154" stroke="' + G + '" stroke-width="2.6" stroke-linecap="round"/>' +
+         '<path d="M250 166 L240 158" stroke="' + G + '" stroke-width="2.1" stroke-linecap="round"/>' +
+         '<path d="M250 160 L260 152" stroke="' + G + '" stroke-width="2.1" stroke-linecap="round"/>';
+  }
+  if(n >= 30){
+    s += '<ellipse cx="237" cy="158" rx="9" ry="5.5" fill="' + G + '" opacity=".88"/>' +
+         '<ellipse cx="263" cy="150" rx="9" ry="5.5" fill="' + G + '" opacity=".88"/>';
+  }
+  if(n >= 80){
+    s += '<ellipse cx="230" cy="146" rx="8" ry="5" fill="' + G + '" opacity=".72"/>' +
+         '<ellipse cx="270" cy="138" rx="8" ry="5" fill="' + G + '" opacity=".72"/>' +
+         '<ellipse cx="250" cy="132" rx="7" ry="4.5" fill="' + G + '" opacity=".66"/>';
+  }
+  if(n >= 160){
+    s += '<circle cx="250" cy="128" r="5" fill="' + nowScene().accent + '"/>' +
+         '<circle cx="250" cy="128" r="10" fill="' + nowScene().accent + '" opacity=".22"/>' +
+         '<circle cx="240" cy="136" r="3.6" fill="#FF9A6B"/>' +
+         '<circle cx="262" cy="122" r="3.6" fill="#FF9A6B"/>';
+  }
+  if(n >= 320){
+    s += '<circle cx="236" cy="120" r="4" fill="#F5C451" class="twinkle"/>' +
+         '<circle cx="264" cy="112" r="4" fill="#F5C451" class="twinkle" style="animation-delay:.7s"/>' +
+         '<circle cx="250" cy="108" r="3.4" fill="#FF6BD6" class="twinkle" style="animation-delay:1.3s"/>';
+  }
+  s += '</g>';
+  return s;
+}
+
+/* ══ 桌面物件 ══ */
+function deskProps(scene){
+  let s = "";
+  /* 台灯：只在没有自带主光源的场景出现（木屋是壁炉、图书室是吊灯、星际舱是仪表盘） */
+  if(scene.lamp !== false){
+    s += '<rect x="80" y="56" width="8" height="150" rx="3" fill="#2E3849"/>' +
+         '<path d="M60 56 L108 56 L98 34 L70 34 Z" fill="' + scene.accent + '" opacity=".92"/>' +
+         '<ellipse cx="84" cy="206" rx="22" ry="5" fill="#232C3C"/>';
+  }
+  switch(scene.id){
+    case "desk":
+      s += '<rect x="150" y="186" width="58" height="13" rx="2.5" fill="#2B3648"/>' +
+           '<rect x="155" y="176" width="48" height="11" rx="2.5" fill="#39465A"/>' +
+           '<rect x="152" y="196" width="54" height="10" rx="2.5" fill="#333F52"/>' +
+           '<rect x="168" y="166" width="22" height="11" rx="2" fill="#4A5870"/>' +
+           '<rect x="196" y="192" width="76" height="14" rx="2" fill="#20293A"/>' +
+           '<rect x="200" y="188" width="68" height="5" rx="2" fill="#2C3648"/>';
+      break;
+    case "changan":
+      s += '<rect x="176" y="188" width="86" height="18" rx="3" fill="#2A1F12"/>' +
+           '<rect x="180" y="176" width="28" height="12" rx="3" fill="#3A2C1A"/>' +
+           '<ellipse cx="252" cy="188" rx="18" ry="7" fill="#2A2E36"/>' +
+           '<ellipse cx="252" cy="186" rx="13" ry="4.5" fill="#151A22"/>' +
+           '<rect x="150" y="172" width="4" height="34" rx="2" fill="#6E4A2A"/>' +
+           '<path d="M152 176 Q162 168 170 176 Q162 186 152 176 Z" fill="#C9B489" opacity=".85"/>' +
+           '<rect x="292" y="182" width="26" height="24" rx="4" fill="#D8D2C4" opacity=".9"/>' +
+           '<rect x="292" y="182" width="26" height="7" rx="3" fill="#B9B2A2" opacity=".9"/>';
+      break;
+    case "neon":
+      s += '<rect x="146" y="190" width="104" height="16" rx="3" fill="#171B2E"/>' +
+           '<rect x="146" y="190" width="104" height="4" rx="2" fill="#232A48"/>' +
+           '<g fill="#FF4FD8" opacity=".55">';
+      for(let i = 0; i < 13; i++) s += '<rect x="' + (152 + i * 7.5) + '" y="197" width="5" height="5" rx="1"/>';
+      s += '</g>' +
+           '<rect x="270" y="176" width="22" height="30" rx="4" fill="#1E2440" stroke="#3A4470" stroke-width="1.4"/>' +
+           '<rect x="274" y="182" width="14" height="14" rx="2" fill="#22D3EE" opacity=".55"/>' +
+           '<rect x="180" y="176" width="46" height="14" rx="3" fill="#131829" stroke="#FF4FD8" stroke-width="1.2" opacity=".9"/>';
+      break;
+    case "cabin":
+      s += '<rect x="170" y="184" width="30" height="22" rx="4" fill="#8A6248"/>' +
+           '<path d="M198 190 Q208 190 208 200 Q208 206 198 206" fill="none" stroke="#8A6248" stroke-width="4"/>' +
+           '<ellipse cx="185" cy="184" rx="15" ry="5" fill="#A87A5C"/>' +
+           '<ellipse cx="185" cy="183" rx="11" ry="3.4" fill="#3A2A1C"/>' +
+           '<path d="M180 174 Q184 166 180 160" stroke="#C9B489" stroke-width="1.6" fill="none" opacity=".5" class="ember"/>' +
+           '<path d="M192 176 Q196 168 192 162" stroke="#C9B489" stroke-width="1.6" fill="none" opacity=".4" class="ember" style="animation-delay:.9s"/>' +
+           '<rect x="220" y="192" width="66" height="12" rx="3" fill="#3A2A1C"/>' +
+           '<rect x="228" y="180" width="12" height="12" rx="2" fill="#5A4230"/>' +
+           '<rect x="246" y="184" width="10" height="8" rx="2" fill="#4A3626"/>';
+      break;
+    case "library":
+      s += '<rect x="152" y="190" width="72" height="15" rx="2.5" fill="#2A3746"/>' +
+           '<rect x="156" y="179" width="64" height="11" rx="2.5" fill="#34455A"/>' +
+           '<rect x="160" y="169" width="56" height="10" rx="2.5" fill="#3E5068"/>' +
+           '<rect x="236" y="172" width="34" height="33" rx="4" fill="#1E2A36" stroke="#42566A" stroke-width="1.4"/>' +
+           '<rect x="240" y="178" width="26" height="12" rx="2" fill="#78B4DE" opacity=".35"/>' +
+           '<rect x="244" y="196" width="18" height="3" rx="1.5" fill="#42566A"/>';
+      break;
+    case "space":
+      s += '<rect x="150" y="186" width="88" height="20" rx="4" fill="#122238" stroke="#2A4568" stroke-width="1.6"/>' +
+           '<g opacity=".9">' +
+           '<rect x="158" y="192" width="30" height="4" rx="2" fill="#5FE3FF"/>' +
+           '<rect x="158" y="199" width="46" height="3" rx="1.5" fill="#5FE3FF" opacity=".55"/>' +
+           '<circle cx="222" cy="195" r="4" fill="#3DDC97"/>' +
+           '</g>' +
+           '<rect x="252" y="176" width="26" height="30" rx="5" fill="#16283E" stroke="#2A4568" stroke-width="1.4"/>' +
+           '<rect x="257" y="182" width="16" height="10" rx="2" fill="#5FE3FF" opacity=".45"/>' +
+           '<ellipse cx="265" cy="176" rx="13" ry="6" fill="#F5F9FC" opacity=".22"/>' +
+           '<rect x="196" y="166" width="52" height="20" rx="3" fill="#0E1A2C" stroke="#2A4568" stroke-width="1.2"/>' +
+           '<path d="M206 176 L216 170 L226 179 L236 168" stroke="#5FE3FF" stroke-width="1.6" fill="none"/>';
+      break;
+  }
+  return s;
+}
+
+/* ══ 桌面摆件（购买后显示） ══ */
+function deskDecor(){
+  const own = D.decor || [];
+  let s = "";
+  if(own.indexOf("mug") >= 0){
+    s += '<g><rect x="316" y="186" width="22" height="22" rx="4" fill="#D8DEE6"/>' +
+         '<path d="M338 192 Q348 192 348 199 Q348 205 338 205" fill="none" stroke="#D8DEE6" stroke-width="4"/>' +
+         '<ellipse cx="327" cy="186" rx="11" ry="4" fill="#EDF2F7"/>' +
+         '<ellipse cx="327" cy="186" rx="8" ry="2.6" fill="#6B4A2A"/></g>';
+  }
+  if(own.indexOf("succu") >= 0){
+    s += '<g><path d="M340 206 L337 194 L357 194 L354 206 Z" fill="#8A6448"/>' +
+         '<ellipse cx="347" cy="194" rx="10" ry="4" fill="#A0785A"/>' +
+         '<ellipse cx="347" cy="190" rx="9" ry="7" fill="#4CAF7D" opacity=".9"/>' +
+         '<ellipse cx="347" cy="186" rx="5" ry="4.5" fill="#5DC98F"/></g>';
+  }
+  if(own.indexOf("doll") >= 0){
+    s += '<g><rect x="368" y="190" width="20" height="17" rx="6" fill="#E8B04A"/>' +
+         '<circle cx="378" cy="188" r="8" fill="#F0C060"/>' +
+         '<circle cx="375" cy="187" r="1.4" fill="#3A2E22"/><circle cx="381" cy="187" r="1.4" fill="#3A2E22"/>' +
+         '<ellipse cx="370" cy="180" rx="4" ry="5" fill="#F0C060"/><ellipse cx="386" cy="180" rx="4" ry="5" fill="#F0C060"/></g>';
+  }
+  if(own.indexOf("incense") >= 0){
+    s += '<g><ellipse cx="124" cy="204" rx="14" ry="5" fill="#6B5A48"/>' +
+         '<path d="M124 200 L124 186" stroke="#8A7660" stroke-width="2"/>' +
+         '<circle cx="124" cy="190" r="2" fill="#F5C451" opacity=".9"/>' +
+         '<path d="M122 178 Q128 168 124 158" stroke="#C8CFD8" stroke-width="2" fill="none" opacity=".3" class="ember"/>' +
+         '<path d="M126 180 Q132 170 128 160" stroke="#C8CFD8" stroke-width="1.6" fill="none" opacity=".22" class="ember" style="animation-delay:1.1s"/></g>';
+  }
+  if(own.indexOf("cat") >= 0){
+    s += '<g class="pv" style="animation-duration:5.5s">' +
+         '<ellipse cx="424" cy="200" rx="22" ry="7" fill="#2A2E38"/>' +
+         '<path d="M406 198 Q404 186 412 182 L436 182 Q444 186 442 198 Z" fill="#3A3F4C"/>' +
+         '<circle cx="436" cy="183" r="9" fill="#3A3F4C"/>' +
+         '<path d="M429 177 L428 170 L434 175 Z" fill="#3A3F4C"/><path d="M443 177 L444 170 L438 175 Z" fill="#3A3F4C"/>' +
+         '<circle cx="433" cy="183" r="1.3" fill="#F5C451"/><circle cx="440" cy="183" r="1.3" fill="#F5C451"/>' +
+         '<path d="M404 196 Q392 190 396 180" stroke="#3A3F4C" stroke-width="4" fill="none" stroke-linecap="round"/></g>';
+  }
+  return s;
+}
+
+
+/* ══ 昼夜色调（按系统时间叠加） ══ */
+function dayPhase(){
+  const h = new Date().getHours();
+  if(h >= 5  && h < 9)  return { name:"清晨" };
+  if(h >= 9  && h < 17) return { name:"白天" };
+  if(h >= 17 && h < 20) return { name:"黄昏" };
+  return { name:"夜里" };
+}
+function dayTint(){
+  const h = new Date().getHours();
+  let c = null;
+  if(h >= 5  && h < 9)  c = "rgba(255,190,130,.085)";
+  else if(h >= 17 && h < 20) c = "rgba(255,128,78,.105)";
+  else if(h < 5 || h >= 20)  c = "rgba(44,68,140,.14)";
+  return c ? '<rect width="560" height="' + V.h + '" fill="' + c + '" pointer-events="none"/>' : "";
+}
+
+/* ══ 无台灯场景的主光源光效 ══ */
+function sceneGlow(sc){
+  if(sc.id === "cabin")
+    return '<ellipse cx="100" cy="180" rx="170" ry="92" fill="#E8874A" opacity=".075"/>' +
+           '<ellipse cx="100" cy="200" rx="96" ry="16" fill="#F5A451" opacity=".10"/>';
+  if(sc.id === "library")
+    return '<path d="M248 66 L182 206 L318 206 Z" fill="#F5C451" opacity=".055"/>' +
+           '<ellipse cx="250" cy="206" rx="104" ry="11" fill="#F5C451" opacity=".06"/>';
+  if(sc.id === "space")
+    return '<ellipse cx="140" cy="120" rx="184" ry="104" fill="#5FE3FF" opacity=".055"/>' +
+           '<ellipse cx="118" cy="150" rx="96" ry="12" fill="#5FE3FF" opacity=".07"/>';
+  return "";
+}
+
+/* ══ 组装场景 ══ */
+function sceneSVG(){
+  const sc = SCENE_BY_ID[D.scene] || SCENES[0];
+  const bg = BG_FN[sc.id] || bgDesk;
+  const st = sc.id === "space" ? { top:"#1E2C44", front:"#0E1726", line:"#2E4468" }
+           : sc.id === "neon"  ? { top:"#242A4A", front:"#12152A", line:"#333A66" }
+           : sc.id === "changan" ? { top:"#3A2C1A", front:"#1E1610", line:"#4A3820" }
+           : sc.id === "cabin" ? { top:"#3E2C1E", front:"#1D1611", line:"#52402C" }
+           : sc.id === "library" ? { top:"#2C3A4A", front:"#141C25", line:"#3A4C60" }
+           : { top:"#2A3446", front:"#161C28", line:"#39465A" };
+  return '<svg viewBox="0 0 560 266" xmlns="http://www.w3.org/2000/svg" style="display:block">' +
+    bg() + person(sc) + deskSurface(st.top, st.front, st.line) + deskProps(sc) + plant() + deskDecor() + dayTint() +
+    (sc.lamp === false ? sceneGlow(sc) : lightCone(sc.accent, sc.id === "neon" ? 0.045 : 0.075)) +
+    '</svg>';
+}
+
+/* ══ 鱼缸 ══ */
+function tankSVG(){
+  const fish = D.fish || [];
+  let s = '<defs><linearGradient id="gW" x1="0" y1="0" x2="0" y2="1">' +
+    '<stop offset="0%" stop-color="rgba(91,157,255,.20)"/><stop offset="100%" stop-color="rgba(91,157,255,.06)"/></linearGradient></defs>' +
+    '<rect width="118" height="56" fill="url(#gW)"/>' +
+    '<rect x="0" y="46" width="118" height="10" fill="#2A2118" opacity=".85"/>' +
+    '<path d="M0 46 Q14 42 26 46 Q40 50 54 46 Q70 42 84 46 Q100 50 118 46 L118 56 L0 56 Z" fill="#3A2E22" opacity=".8"/>';
+  // 水草
+  s += '<path d="M16 46 Q10 34 18 24 Q24 34 20 46 Z" fill="#2F6B4A" opacity=".85"/>' +
+       '<path d="M104 46 Q98 36 106 28 Q112 36 108 46 Z" fill="#2F6B4A" opacity=".7"/>';
+  // 气泡
+  s += '<circle cx="52" cy="30" r="1.8" fill="#9CCBEC" opacity=".5" class="ember" style="animation-delay:.3s"/>' +
+       '<circle cx="68" cy="22" r="1.3" fill="#9CCBEC" opacity=".4" class="ember" style="animation-delay:1.2s"/>';
+  const spots = [[34,30],[62,34],[86,26]];
+  const kinds = { small:{ c:"#F5C451", r:5 }, mid:{ c:"#FF8A5A", r:6.5 }, big:{ c:"#FF6BD6", r:8 } };
+  fish.forEach((f, i) => {
+    const sp = spots[i % 3];
+    const k = kinds[f.kind] || kinds.small;
+    const grown = (Date.now() - f.born) >= GROW_MS[f.kind];
+    s += '<g class="pv" style="animation-duration:' + (3.4 + i * 0.8) + 's">' +
+         '<ellipse cx="' + sp[0] + '" cy="' + sp[1] + '" rx="' + k.r + '" ry="' + (k.r * 0.62) + '" fill="' + k.c + '" opacity=".95"/>' +
+         '<path d="M' + (sp[0] + k.r) + ' ' + sp[1] + ' l' + (k.r * 0.9) + ' -' + (k.r * 0.6) + ' l0 ' + (k.r * 1.2) + ' Z" fill="' + k.c + '" opacity=".8"/>' +
+         '<circle cx="' + (sp[0] - k.r * 0.45) + '" cy="' + (sp[1] - 1) + '" r="1.1" fill="#1A1208"/>' +
+         (grown ? '<circle cx="' + sp[0] + '" cy="' + (sp[1] - k.r) + '" r="2" fill="#F5C451" class="twinkle"/>' : '') +
+         '</g>';
+  });
+  return s;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   二、数据层
+   ═══════════════════════════════════════════════════════════ */
+
+const KEY = "kaoyan_focus_v1";   // 沿用 v1 的 key，老数据自动升级
+
+/* ── 复习科目（章节名是合并依据，可增删而不丢勾选） ── */
+const DEFAULT_SUBJECTS = [
+  { id:"pol", name:"政治", score:100, color:"#FF7A45", chapters:[
+    "马克思主义基本原理","毛泽东思想和中特理论","中国近现代史纲要","思想道德与法治","形势与政策","历年真题"]},
+  { id:"eng", name:"英语一", score:100, color:"#5B9DFF", chapters:[
+    "核心词汇","长难句","阅读理解","新题型","翻译","写作","历年真题"]},
+  { id:"mat", name:"数学一", score:150, color:"#F5C451", chapters:[
+    "高等数学","线性代数","概率论与数理统计","660 题","历年真题"]},
+  { id:"cs", name:"408", score:150, color:"#A78BFA", chapters:[
+    "数据结构","计算机组成原理","操作系统","计算机网络","王道单科书","历年真题"]},
+  { id:"fs", name:"复试准备", score:0, color:"#3DDC97", chapters:[
+    "离散数学","编译原理","机试 · 在线编程","综合口试 · 专业知识","英语听说"]}
+];
+
+/* ── 成就（24 项） ── */
+const ACHIEVEMENTS = [
+  { id:"first",  name:"第一颗番茄", desc:"完成 1 个番茄" },
+  { id:"p10",    name:"十粒种子",   desc:"累计 10 个番茄" },
+  { id:"p50",    name:"半百",       desc:"累计 50 个番茄" },
+  { id:"p200",   name:"两百",       desc:"累计 200 个番茄" },
+  { id:"p500",   name:"五百小时",   desc:"累计 500 个番茄" },
+  { id:"m4",     name:"四小时",     desc:"单日专注满 4 小时" },
+  { id:"m8",     name:"八小时",     desc:"单日专注满 8 小时" },
+  { id:"m12",    name:"一天当两天", desc:"单日专注满 12 小时" },
+  { id:"s3",     name:"三天不辍",   desc:"连续打卡 3 天" },
+  { id:"s7",     name:"一周不断",   desc:"连续打卡 7 天" },
+  { id:"s30",    name:"三十天",     desc:"连续打卡 30 天" },
+  { id:"s100",   name:"百日磨剑",   desc:"连续打卡 100 天" },
+  { id:"t1",     name:"首战告捷",   desc:"完成 1 项任务" },
+  { id:"t100",   name:"事在人为",   desc:"完成 100 项任务" },
+  { id:"c1",     name:"开卷",       desc:"勾选 1 个章节" },
+  { id:"half",   name:"过半",       desc:"总进度达 50%" },
+  { id:"alldone",name:"满弓",       desc:"总进度达 100%" },
+  { id:"sc3",    name:"三处风景",   desc:"解锁 3 个场景" },
+  { id:"sc6",    name:"走遍全部",   desc:"解锁全部 6 个场景" },
+  { id:"d1",     name:"第一件家当", desc:"买下第一件装扮" },
+  { id:"d5",     name:"布置房间",   desc:"买下 5 件装扮" },
+  { id:"r6",     name:"半个咖啡师", desc:"调出 6 种饮品" },
+  { id:"r12",    name:"咖啡师",     desc:"调出全部 12 种饮品" },
+  { id:"fish",   name:"第一次收成", desc:"养大并卖出一条鱼" }
+];
+
+/* ── 装扮 ── */
+const SHOP_ITEMS = [
+  { id:"mug",     name:"白瓷马克杯", price:30,  desc:"桌角放一只杯子。装着什么都不重要。",
+    icon:'<rect x="4" y="8" width="12" height="11" rx="2.5" fill="#D8DEE6"/><path d="M16 11 q5 0 5 4 t-5 4" fill="none" stroke="#D8DEE6" stroke-width="2"/>' },
+  { id:"succu",   name:"多肉小盆",   price:45,  desc:"不用浇水也不会死的那种。适合现在的你。",
+    icon:'<path d="M6 19 L5 13 L15 13 L14 19 Z" fill="#8A6448"/><ellipse cx="10" cy="12" rx="5" ry="3.6" fill="#4CAF7D"/>' },
+  { id:"doll",    name:"木头小人",   price:70,  desc:"盯着你看。看久了会不好意思摸鱼。",
+    icon:'<rect x="7" y="10" width="8" height="7" rx="3" fill="#E8B04A"/><circle cx="11" cy="8" r="4" fill="#F0C060"/>' },
+  { id:"band",    name:"素色发带",   price:90,  desc:"把她额前的碎发别住。低调，但桌子会好看一点。",
+    icon:'<rect x="4" y="10" width="16" height="3.4" rx="1.7" fill="#FF7A45"/><path d="M4 11 L1 8 L1 15 Z" fill="#FF7A45" opacity=".8"/>' },
+  { id:"incense", name:"线香",       price:110, desc:"点起来有一缕烟。气味这件事，专注时很要紧。",
+    icon:'<ellipse cx="11" cy="19" rx="7" ry="2.4" fill="#6B5A48"/><path d="M11 17 V9" stroke="#8A7660" stroke-width="1.6"/><circle cx="11" cy="8" r="1.6" fill="#F5C451"/>' },
+  { id:"beanie",  name:"红色毛线帽", price:120, desc:"屋里也戴着。冬天用的东西，看着就暖和。",
+    icon:'<path d="M5 12 q0-8 6-8 t6 8 Z" fill="#B8523F"/><rect x="4" y="10" width="14" height="3.6" rx="1.8" fill="#D26A55"/><circle cx="11" cy="3" r="2.2" fill="#E8A88F"/>' },
+  { id:"horns",   name:"鹿角",       price:140, desc:"买回来才发现有点幼稚。但她戴着确实好看。",
+    icon:'<path d="M6 18 L3 8 L7 12 Z" fill="#C9A06A"/><path d="M16 18 L19 8 L15 12 Z" fill="#C9A06A"/>' },
+  { id:"headset", name:"耳机",       price:180, desc:"戴上就是结界。外面说什么都听不见了。",
+    icon:'<path d="M4 14 q0-9 7-9 t7 9" fill="none" stroke="#3A4658" stroke-width="2.6"/><rect x="2" y="13" width="4.4" height="7" rx="2" fill="#3A4658"/><rect x="15.6" y="13" width="4.4" height="7" rx="2" fill="#3A4658"/>' },
+  { id:"cat",     name:"一只猫",     price:220, desc:"它会睡在你桌角。你起来的时候它会醒一下，然后接着睡。",
+    icon:'<ellipse cx="11" cy="15" rx="8" ry="4.4" fill="#3A3F4C"/><circle cx="16" cy="10" r="4" fill="#3A3F4C"/><path d="M13.5 7 L13 4 L15.5 6 Z" fill="#3A3F4C"/><path d="M18.5 7 L19 4 L16.5 6 Z" fill="#3A3F4C"/>' }
+];
+
+/* ── 鱼 ── */
+const FISH_KINDS = {
+  small:{ name:"小金鱼", price:30,  every:25*60000, grow:3*3600000,  desc:"25 分钟吐 1 颗钻石。3 小时后长大，能卖更高价。" },
+  mid:  { name:"锦鲤",   price:80,  every:18*60000, grow:6*3600000,  desc:"18 分钟吐 1 颗钻石。6 小时长大。" },
+  big:  { name:"龙鱼",   price:200, every:12*60000, grow:12*3600000, desc:"12 分钟吐 1 颗钻石。12 小时长大。" }
+};
+const GROW_MS = { small:FISH_KINDS.small.grow, mid:FISH_KINDS.mid.grow, big:FISH_KINDS.big.grow };
+const TANK_MAX = 3;
+
+/* ── 饮品配方（4 基底 × 3 加料 = 12） ── */
+const BREW_BASE = [
+  { id:"coffee", name:"手冲咖啡", cup:"☕" },
+  { id:"matcha", name:"抹茶",     cup:"🍵" },
+  { id:"tea",    name:"红茶",     cup:"🫖" },
+  { id:"milk",   name:"热牛奶",   cup:"🥛" }
+];
+const BREW_ADD = [
+  { id:"honey", name:"一勺蜂蜜" },
+  { id:"foam",  name:"海盐奶盖" },
+  { id:"shot",  name:"双份浓缩" }
+];
+const RECIPES = {
+  "coffee+honey":{ n:"蜂蜜美式",   d:"甜得很克制。适合还没有完全醒的早晨。" },
+  "coffee+foam": { n:"海盐拿铁",   d:"咸的奶盖压住咖啡的苦。你会喜欢这个。" },
+  "coffee+shot": { n:"双份特调",   d:"很浓。别在下午四点以后喝。" },
+  "matcha+honey":{ n:"蜜香抹茶",   d:"苦里带了点甜，像今天的状态。" },
+  "matcha+foam": { n:"抹茶奶盖",   d:"绿得很安静，适合配一本厚的书。" },
+  "matcha+shot": { n:"浓抹茶",     d:"抹茶加浓缩，味道很冲。有人爱，有人受不了。" },
+  "tea+honey":   { n:"蜜香红茶",   d:"热的，甜度刚好。冬天的自习室标配。" },
+  "tea+foam":    { n:"海盐茶拿铁", d:"茶味被奶盖盖住一半，剩下的刚好。" },
+  "tea+shot":    { n:"鸳鸯",       d:"港式做法。一半茶一半咖啡，两头都占。" },
+  "milk+honey":  { n:"蜂蜜热牛奶", d:"睡前喝。你今晚不该再熬夜了。" },
+  "milk+foam":   { n:"双倍奶盖",   d:"几乎没有咖啡因。纯粹是给自己一个仪式的理由。" },
+  "milk+shot":   { n:"拿铁",       d:"最普通的一杯，也是最不会出错的一杯。" }
+};
+
+/* ── 手机留言（按等级解锁） ── */
+const MESSAGES = [
+  { lv:1,  who:"妈",   text:"冰箱里给你留了饺子。别熬太晚。" },
+  { lv:1,  who:"自己", text:"今天先把数学看完。手机放到另一个房间。" },
+  { lv:2,  who:"老周", text:"660 我今天做完第三章了。你到哪了？" },
+  { lv:3,  who:"小林", text:"刚下班，累成狗。你那边进度别停啊，我这还等着看你上岸。" },
+  { lv:3,  who:"自己", text:"别一直看别人复习到第几轮。看自己的表。" },
+  { lv:5,  who:"妈",   text:"你爸问你什么时候回来。我说你在忙。他没说别的。" },
+  { lv:7,  who:"老周", text:"我做了一套英语真题，错了 7 个阅读。有点绷不住。" },
+  { lv:7,  who:"自己", text:"错 7 个不是问题。停下来才是。" },
+  { lv:9,  who:"小林", text:"我们组今天又裁了两个。你选的路可能是对的。" },
+  { lv:12, who:"老周", text:"我现在每天早上六点半到自习室。你也别赖床了。" },
+  { lv:12, who:"自己", text:"今天状态不好也要坐满。坐满本身就是成绩。" },
+  { lv:15, who:"妈",   text:"你上次说不考了，我知道你是气话。妈不懂这个，但妈信你。" },
+  { lv:18, who:"小林", text:"我攒了点钱，你考研那阵要是紧就跟我说。别硬撑。" },
+  { lv:18, who:"自己", text:"记一下：你已经比三个月前的自己强很多了。" },
+  { lv:22, who:"老周", text:"还有一年。我们都会上岸的，我不信我们不行。" },
+  { lv:30, who:"自己", text:"走到这里的人不多。谢谢你没有停下来。" }
+];
+
+/* ── 等级 ── */
+function xpNeed(lv){ return 60 + (lv - 1) * 45; }
+function lvFromXp(xp){
+  let lv = 1, acc = 0;
+  while(lv < 99){
+    const need = xpNeed(lv);
+    if(xp < acc + need) return { lv:lv, base:acc, need:need };
+    acc += need; lv++;
+  }
+  return { lv:99, base:acc, need:xpNeed(99) };
+}
+
+/* ── 默认数据 ── */
+function blank(){
+  return {
+    v: 2,
+    examDate: "2027-12-25T08:30:00",
+    since: "2026-09-01",
+    goal: "写一句给自己的话",
+    tone: (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches)
+            ? "dawn" : "dusk",
+    settings: { focusMin:25, shortMin:5, longMin:15, longEvery:4,
+                autoNext:true, sound:true, music:true, autoAudio:true },
+    mix: Object.assign({}, SCENES[0].ambience),
+    completedInCycle: 0,
+    total: { pomodoros:0, minutes:0 },
+    daily: {},
+    streak: { current:0, best:0, lastDate:null },
+    subjects: [],
+    tasks: [],
+    achievements: {},
+    tasksDoneTotal: 0,
+    xp: 0,
+    gems: 0,
+    scene: "desk",
+    unlocked: ["desk"],
+    decor: [],
+    fish: [],
+    recipes: [],
+    stickies: ["","","",""],
+    diary: []
+  };
+}
+
+/* 科目按章节名合并，这样老数据的勾选不会因为章节增删而丢失 */
+function buildSubjects(saved){
+  const done = {};
+  (saved || []).forEach(s => (s.chapters || []).forEach(c => { if(c.done) done[c.name] = 1; }));
+  return DEFAULT_SUBJECTS.map(s => ({
+    id:s.id, name:s.name, score:s.score, color:s.color,
+    chapters: s.chapters.map(n => ({ name:n, done: !!done[n] }))
+  }));
+}
+
+/* ── 从 v1 数据反推 XP / 钻石，避免老用户从零开始 ── */
+function legacyXp(d){
+  const p = (d.total && d.total.pomodoros) || 0;
+  const t = d.tasksDoneTotal || 0;
+  let ch = 0;
+  (d.subjects || []).forEach(s => (s.chapters || []).forEach(c => { if(c.done) ch++; }));
+  const ach = Object.keys(d.achievements || {}).length;
+  return p * 12 + t * 6 + ch * 4 + ach * 5;
+}
+
+function load(){
+  let d = null;
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) d = JSON.parse(raw);
+  }catch(e){ d = null; }
+
+  const b = blank();
+  if(!d) { b.subjects = buildSubjects(null); return b; }
+
+  const out = Object.assign(b, d, {
+    settings: Object.assign(b.settings, d.settings || {}),
+    total:    Object.assign(b.total, d.total || {}),
+    streak:   Object.assign(b.streak, d.streak || {}),
+    mix:      Object.assign(b.mix, d.mix || {})
+  });
+  out.subjects = buildSubjects(d.subjects);
+  if(!Array.isArray(out.decor)) out.decor = [];
+  if(!Array.isArray(out.fish)) out.fish = [];
+  if(!Array.isArray(out.recipes)) out.recipes = [];
+  if(!Array.isArray(out.unlocked) || !out.unlocked.length) out.unlocked = ["desk"];
+  if(!Array.isArray(out.stickies) || out.stickies.length !== 4) out.stickies = ["","","",""];
+  if(!Array.isArray(out.diary)) out.diary = [];
+  if(!SCENE_BY_ID[out.scene]) out.scene = "desk";
+  if(typeof out.gems !== "number") out.gems = 0;
+  if(!out.goal || out.goal === "\u4e0a\u4ea4 085400 / \u56fd\u79d1\u5927 085404") out.goal = b.goal;
+  if(!TONE_SET[out.tone]) out.tone = b.tone;
+
+  // 老数据升级：第一次进 v2 时补发 XP 与钻石
+  if(d.xp === undefined){
+    out.xp = legacyXp(d);
+    out.gems = ((d.total && d.total.pomodoros) || 0) + 30;
+    // 按补偿后的等级补齐已解锁场景
+    const lvf = lvFromXp(out.xp).lv;
+    SCENES.forEach(s => { if(s.lv <= lvf && out.unlocked.indexOf(s.id) < 0) out.unlocked.push(s.id); });
+  }
+  return out;
+}
+
+let D = load();
+
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(e){}
+}
+
+const TONE_SET = { night:1, dusk:1, dawn:1, day:1 };
+
+/* ═══════════════ 工具 ═══════════════ */
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, "0");
+function dayKey(d){
+  const x = d || new Date();
+  return x.getFullYear() + "-" + pad(x.getMonth() + 1) + "-" + pad(x.getDate());
+}
+function todayStat(){
+  const k = dayKey();
+  if(!D.daily[k]) D.daily[k] = { pomodoros:0, minutes:0, tasks:0 };
+  if(D.daily[k].tasks === undefined) D.daily[k].tasks = 0;
+  return D.daily[k];
+}
+function clamp(v, lo, hi, fb){
+  v = parseInt(v, 10);
+  if(isNaN(v)) return fb;
+  return Math.min(hi, Math.max(lo, v));
+}
+function esc(s){
+  return String(s).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+}
+function nowScene(){ return SCENE_BY_ID[D.scene] || SCENES[0]; }
+
+/* ═══════════════ 成长 ═══════════════ */
+function addXp(n, reason){
+  const before = lvFromXp(D.xp).lv;
+  D.xp += n;
+  const after = lvFromXp(D.xp).lv;
+  const news = [];
+  if(after > before){
+    for(let lv = before + 1; lv <= after; lv++){
+      SCENES.forEach(s => {
+        if(s.lv === lv && D.unlocked.indexOf(s.id) < 0){
+          D.unlocked.push(s.id);
+          news.push(s.name);
+        }
+      });
+    }
+  }
+  if(news.length)      toast("LV" + after + " · 解锁 " + news.join("、"), "去场景栏切换看看");
+  else if(after > before) toast("升到 LV" + after, reason || null);
+  else if(reason)      toast("+" + n + " XP", reason);
+}
+function addGems(n, reason){
+  D.gems += n;
+  if(reason) toast("+" + n + " 钻石", reason);
+}
+
+/* ═══════════════ 鱼缸结算（离线也补算） ═══════════════ */
+function tankTick(silent){
+  const now = Date.now();
+  let gained = 0;
+  D.fish.forEach(f => {
+    const k = FISH_KINDS[f.kind];
+    if(!k) return;
+    if(f.lastYield === undefined) f.lastYield = f.born;
+    const n = Math.floor((now - f.lastYield) / k.every);
+    if(n > 0){
+      f.lastYield += n * k.every;
+      gained += n;
+    }
+  });
+  if(gained > 0){
+    D.gems += gained;
+    if(!silent) toast("+" + gained + " 钻石", "鱼缸的收成");
+    save();
+  }
+}
+
+/* ═══════════════ 轻提示 ═══════════════ */
+let toastTimer = null;
+function toast(title, sub){
+  let el = $("toast");
+  if(!el){
+    el = document.createElement("div");
+    el.id = "toast";
+    el.style.cssText = "position:fixed;left:50%;bottom:26px;transform:translateX(-50%);" +
+      "background:var(--panel);border:1px solid var(--line-2);border-radius:12px;" +
+      "padding:11px 20px;z-index:80;box-shadow:0 14px 40px rgba(0,0,0,.5);" +
+      "text-align:center;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s";
+    document.body.appendChild(el);
+  }
+  el.innerHTML = '<div style="font-size:13px;font-weight:500;color:var(--tx)">' + esc(title) + '</div>' +
+                 (sub ? '<div style="font-size:11px;color:var(--tx-3);margin-top:2px">' + esc(sub) + '</div>' : '');
+  el.style.opacity = "1";
+  el.style.transform = "translateX(-50%) translateY(0)";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    el.style.opacity = "0";
+    el.style.transform = "translateX(-50%) translateY(8px)";
+  }, 2600);
+}
+
+/* ═══════════════ 自建对话框 ═══════════════ */
+let dlgCb = null;
+function openDlg(opt){
+  $("dlgTitle").textContent = opt.title || "提示";
+  $("dlgMsg").innerHTML = opt.html || "";
+  const inp = $("dlgInput");
+  if(opt.input !== undefined){
+    inp.style.display = "block";
+    inp.value = opt.input;
+    setTimeout(() => { inp.focus(); inp.select(); }, 60);
+  }else{
+    inp.style.display = "none";
+    inp.value = "";
+  }
+  $("dlgNo").textContent = opt.noText || "取消";
+  $("dlgYes").textContent = opt.yesText || "确定";
+  $("dlgNo").style.display = opt.hideNo ? "none" : "block";
+  dlgCb = opt.onYes || null;
+  $("dlg").classList.add("show");
+}
+function closeDlg(){
+  $("dlg").classList.remove("show");
+  dlgCb = null;
+}
+function confirmBox(title, html, cb, yesText){
+  openDlg({ title:title, html:html, yesText:yesText || "确定", onYes:cb });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   三、音频引擎（全部现场合成，不依赖任何音频文件）
+   ═══════════════════════════════════════════════════════════ */
+
+const AUDIO = {
+  ac:null, master:null, started:false,
+  tracks:{}, timers:{},
+  music:{ on:false, sum:null, idx:0, next:0 }
+};
+
+const MIX_KEYS = [
+  { id:"rain",     name:"雨声" },
+  { id:"fire",     name:"篝火" },
+  { id:"wind",     name:"风声" },
+  { id:"cafe",     name:"咖啡馆" },
+  { id:"keys",     name:"键盘" },
+  { id:"crickets", name:"夜虫" }
+];
+
+/* ── 噪声缓冲 ── */
+function noiseBuffer(type, sec){
+  const ac = AUDIO.ac;
+  const len = Math.max(1, Math.floor(ac.sampleRate * sec));
+  const buf = ac.createBuffer(1, len, ac.sampleRate);
+  const d = buf.getChannelData(0);
+  if(type === "pink"){
+    let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+    for(let i = 0; i < len; i++){
+      const w = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + w * 0.0555179;
+      b1 = 0.99332 * b1 + w * 0.0750759;
+      b2 = 0.96900 * b2 + w * 0.1538520;
+      b3 = 0.86650 * b3 + w * 0.3104856;
+      b4 = 0.55000 * b4 + w * 0.5329522;
+      b5 = -0.7616 * b5 - w * 0.0168980;
+      d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11;
+      b6 = w * 0.115926;
+    }
+  }else if(type === "brown"){
+    let last = 0;
+    for(let i = 0; i < len; i++){
+      const w = Math.random() * 2 - 1;
+      last = (last + 0.02 * w) / 1.02;
+      d[i] = last * 3.2;
+    }
+  }else{
+    for(let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+  }
+  return buf;
+}
+
+function loopNoise(type, sec){
+  const s = AUDIO.ac.createBufferSource();
+  s.buffer = noiseBuffer(type, sec || 3);
+  s.loop = true;
+  return s;
+}
+function bq(type, freq, q){
+  const f = AUDIO.ac.createBiquadFilter();
+  f.type = type; f.frequency.value = freq;
+  if(q !== undefined) f.Q.value = q;
+  return f;
+}
+function gainNode(v){
+  const g = AUDIO.ac.createGain();
+  g.gain.value = v || 0;
+  return g;
+}
+/* 平滑设定音量，避免爆音 */
+function rampGain(g, v, t){
+  const ac = AUDIO.ac, now = ac.currentTime;
+  try{
+    g.gain.cancelScheduledValues(now);
+    g.gain.setValueAtTime(Math.max(0.0001, g.gain.value), now);
+    g.gain.linearRampToValueAtTime(Math.max(0.0001, v), now + (t || 0.35));
+  }catch(e){ g.gain.value = v; }
+}
+function vol(key){ return (D.mix[key] || 0) / 100; }
+
+/* ── 建立 6 条环境音 ── */
+function buildTracks(){
+  const ac = AUDIO.ac, out = AUDIO.master;
+
+  // 1 雨声：白噪声 → 高通 → 低通，带缓慢的密度起伏
+  {
+    const src = loopNoise("white", 3);
+    const hp = bq("highpass", 760), lp = bq("lowpass", 7200, 0.6), g = gainNode(0);
+    src.connect(hp); hp.connect(lp); lp.connect(g); g.connect(out);
+    src.start();
+    const lfo = ac.createOscillator(), lg = ac.createGain();
+    lfo.type = "sine"; lfo.frequency.value = 0.11; lg.gain.value = 900;
+    lfo.connect(lg); lg.connect(lp.frequency); lfo.start();
+    AUDIO.tracks.rain = { src:src, g:g, base:0.80 };
+  }
+  // 2 篝火：棕噪声铺底 + 随机噼啪
+  {
+    const src = loopNoise("brown", 4);
+    const lp = bq("lowpass", 620, 0.7), g = gainNode(0);
+    src.connect(lp); lp.connect(g); g.connect(out);
+    src.start();
+    AUDIO.tracks.fire = { src:src, g:g, base:0.72, kind:"crackle" };
+  }
+  // 3 风声：粉噪声 → 低通，滤波频率被超低频调制
+  {
+    const src = loopNoise("pink", 4);
+    const lp = bq("lowpass", 380, 1.1), g = gainNode(0);
+    src.connect(lp); lp.connect(g); g.connect(out);
+    src.start();
+    const lfo = ac.createOscillator(), lg = ac.createGain();
+    lfo.type = "sine"; lfo.frequency.value = 0.06; lg.gain.value = 190;
+    lfo.connect(lg); lg.connect(lp.frequency); lfo.start();
+    AUDIO.tracks.wind = { src:src, g:g, base:0.95 };
+  }
+  // 4 咖啡馆：中频噪声铺底 + 零星杯碟
+  {
+    const src = loopNoise("brown", 4);
+    const bp = bq("bandpass", 760, 0.55), g = gainNode(0);
+    src.connect(bp); bp.connect(g); g.connect(out);
+    src.start();
+    const src2 = loopNoise("white", 3);
+    const bp2 = bq("bandpass", 320, 0.9), g2 = gainNode(0);
+    src2.connect(bp2); bp2.connect(g2); g2.connect(g);
+    src2.start();
+    AUDIO.tracks.cafe = { src:src, g:g, base:0.60, extra:g2, kind:"clink" };
+  }
+  // 5 键盘：随机敲击脉冲
+  {
+    const g = gainNode(0);
+    g.connect(out);
+    AUDIO.tracks.keys = { g:g, base:1.0, kind:"typing" };
+  }
+  // 6 夜虫：窄带高频 + 周期性鸣叫
+  {
+    const g = gainNode(0);
+    const bp = bq("bandpass", 4300, 3.5);
+    g.connect(bp); bp.connect(out);
+    AUDIO.tracks.crickets = { g:g, base:0.70, kind:"chirp" };
+  }
+}
+
+/* 临时脉冲（用于噼啪 / 杯碟 / 敲键盘） */
+function burst(opt){
+  const ac = AUDIO.ac, t = ac.currentTime + (opt.delay || 0);
+  const src = ac.createBufferSource();
+  src.buffer = noiseBuffer("white", 0.12);
+  const f = bq(opt.type || "bandpass", opt.freq || 2200, opt.q || 1.2);
+  const g = ac.createGain();
+  src.connect(f); f.connect(g); g.connect(opt.dest || AUDIO.master);
+  const peak = opt.vol || 0.2, dur = opt.dur || 0.09;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.linearRampToValueAtTime(peak, t + 0.006);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  src.start(t); src.stop(t + dur + 0.05);
+}
+
+/* 调度器：不同音轨各自的随机节奏 */
+function scheduleAll(){
+  const loop = (key, fn, lo, hi) => {
+    clearTimeout(AUDIO.timers[key]);
+    const step = () => {
+      if(!AUDIO.started) return;
+      if(vol(key) > 0.01) fn();
+      AUDIO.timers[key] = setTimeout(step, lo + Math.random() * (hi - lo));
+    };
+    AUDIO.timers[key] = setTimeout(step, 200 + Math.random() * 600);
+  };
+
+  loop("fire", () => {
+    if(Math.random() < 0.85) burst({ freq:1400 + Math.random() * 2600, q:1.6, vol:0.05 + Math.random() * 0.13, dur:0.05 + Math.random() * 0.09, dest:AUDIO.tracks.fire.g });
+  }, 180, 1400);
+
+  loop("cafe", () => {
+    burst({ freq:2600 + Math.random() * 2400, q:2.2, vol:0.03 + Math.random() * 0.06, dur:0.06 + Math.random() * 0.08, dest:AUDIO.tracks.cafe.g });
+  }, 900, 4200);
+
+  loop("keys", () => {
+    const n = 1 + Math.floor(Math.random() * 4);
+    for(let i = 0; i < n; i++){
+      burst({ freq:2000 + Math.random() * 2200, q:1.4, vol:0.05 + Math.random() * 0.09, dur:0.035 + Math.random() * 0.04, delay:i * (0.07 + Math.random() * 0.09), dest:AUDIO.tracks.keys.g });
+    }
+  }, 160, 900);
+
+  loop("crickets", () => {
+    const t = AUDIO.ac.currentTime;
+    for(let i = 0; i < 3; i++){
+      const o = AUDIO.ac.createOscillator(), g = AUDIO.ac.createGain();
+      o.type = "square";
+      o.frequency.value = 4000 + Math.random() * 900;
+      o.connect(g); g.connect(AUDIO.tracks.crickets.g);
+      const at = t + i * 0.075;
+      g.gain.setValueAtTime(0.0001, at);
+      g.gain.linearRampToValueAtTime(0.035, at + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, at + 0.05);
+      o.start(at); o.stop(at + 0.07);
+    }
+  }, 700, 2800);
+}
+
+/* ── 生成式 Lofi ── */
+const CHORDS = [
+  { root:110.00, notes:[110.00, 130.81, 164.81, 196.00] },  // Am7
+  { root: 87.31, notes:[ 87.31, 110.00, 130.81, 164.81] },  // Fmaj7
+  { root:130.81, notes:[130.81, 164.81, 196.00, 246.94] },  // Cmaj7
+  { root: 98.00, notes:[ 98.00, 123.47, 146.83, 174.61] }   // G7
+];
+const PENTA = [220.00, 261.63, 293.66, 329.63, 392.00, 440.00, 523.25, 587.33];
+
+function buildMusic(){
+  const ac = AUDIO.ac;
+  const sum = gainNode(1);
+  const lp = bq("lowpass", 2300, 0.6);
+  const out = gainNode(0);
+  sum.connect(lp); lp.connect(out); out.connect(AUDIO.master);
+
+  const dl = ac.createDelay(1.0); dl.delayTime.value = 0.38;
+  const fb = gainNode(0.3), wet = gainNode(0.32);
+  lp.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(wet); wet.connect(out);
+
+  AUDIO.music.sum = sum;
+  AUDIO.music.out = out;
+}
+
+function mNote(freq, at, dur, vol, type){
+  const ac = AUDIO.ac;
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.type = type || "triangle";
+  o.frequency.value = freq;
+  o.connect(g); g.connect(AUDIO.music.sum);
+  g.gain.setValueAtTime(0.0001, at);
+  g.gain.linearRampToValueAtTime(vol, at + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+  o.start(at); o.stop(at + dur + 0.08);
+}
+
+function musicTick(){
+  if(!AUDIO.started || !AUDIO.music.on) return;
+  const ac = AUDIO.ac;
+  if(ac.currentTime + 0.9 < AUDIO.music.next) return;
+
+  const at = Math.max(ac.currentTime + 0.06, AUDIO.music.next);
+  const ch = CHORDS[AUDIO.music.idx % CHORDS.length];
+
+  // pad
+  const dur = 4.4;
+  for(let k = 0; k < 3; k++){
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = "sine";
+    o.frequency.value = ch.notes[k];
+    o.connect(g); g.connect(AUDIO.music.sum);
+    g.gain.setValueAtTime(0.0001, at);
+    g.gain.linearRampToValueAtTime(0.075, at + 1.7);
+    g.gain.linearRampToValueAtTime(0.0001, at + dur);
+    o.start(at); o.stop(at + dur + 0.1);
+  }
+  // 低音
+  mNote(ch.root / 2, at, 3.2, 0.10, "sine");
+  // 旋律
+  for(let i = 0; i < 8; i++){
+    if(Math.random() < 0.40){
+      const f = PENTA[Math.floor(Math.random() * PENTA.length)];
+      mNote(f, at + i * 0.5, 0.85 + Math.random() * 0.5, 0.042 + Math.random() * 0.028, "triangle");
+    }
+  }
+  AUDIO.music.idx++;
+  AUDIO.music.next = at + 4;
+}
+
+/* ── 启动 / 音量 ── */
+function audioStart(){
+  if(AUDIO.started) return true;
+  try{
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return false;
+    AUDIO.ac = new Ctx();
+    AUDIO.master = gainNode(0.9);
+    AUDIO.master.connect(AUDIO.ac.destination);
+    buildTracks();
+    buildMusic();
+    AUDIO.started = true;
+    applyMix();
+    scheduleAll();
+    setInterval(musicTick, 400);
+    if(D.settings.music) musicSet(true);
+    return true;
+  }catch(e){ return false; }
+}
+function audioResume(){
+  if(AUDIO.ac && AUDIO.ac.state === "suspended") AUDIO.ac.resume();
+}
+function applyMix(){
+  if(!AUDIO.started) return;
+  MIX_KEYS.forEach(k => {
+    const tr = AUDIO.tracks[k.id];
+    if(tr && tr.g) rampGain(tr.g, vol(k.id) * (tr.base || 0.6), 0.4);
+    if(tr && tr.extra) rampGain(tr.extra, vol(k.id) * 0.55, 0.4);
+  });
+  const st = $("audioState");
+  if(st){
+    const total = MIX_KEYS.reduce((a, k) => a + (D.mix[k.id] || 0), 0);
+    st.textContent = total === 0 && !D.settings.music ? "全部静音" : (D.settings.music ? "混音 + Lofi" : "混音中");
+  }
+}
+function musicSet(on){
+  if(!AUDIO.started) return;
+  AUDIO.music.on = !!on;
+  rampGain(AUDIO.music.out, on ? 0.9 : 0, 0.6);
+  if(on){
+    AUDIO.music.next = 0; AUDIO.music.idx = 0;
+    musicTick();
+  }
+  const b = $("btnMusic");
+  if(b) b.classList.toggle("on", !!on);
+  applyMix();
+}
+function tankTickQuiet(){ tankTick(true); refreshGems(); }
+
+/* ── 提示音 ── */
+function chime(focusDone){
+  const ac = AUDIO.ac;
+  const play = (ctx, dest) => {
+    const seq = focusDone ? [[784,0,.35],[1047,.16,.5],[1319,.34,.6]] : [[523,0,.3],[659,.15,.45]];
+    seq.forEach(s => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = "sine"; o.frequency.value = s[0];
+      o.connect(g); g.connect(dest);
+      const t0 = ctx.currentTime + s[1];
+      g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(0.2, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, t0 + s[2]);
+      o.start(t0); o.stop(t0 + s[2] + 0.03);
+    });
+  };
+  if(ac && ac.state !== "closed"){ play(ac, AUDIO.master); return; }
+  try{
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    const tmp = new Ctx();
+    play(tmp, tmp.destination);
+    setTimeout(() => { try{ tmp.close(); }catch(e){} }, 1600);
+  }catch(e){}
+}
+
+/* ═══════════════════════════════════════════════════════════
+   四、界面渲染
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── 分享常量 ── */
+const SITE_URL = "https://walkinthrufire.github.io/kaoyan-focus/";
+const INTRO = "一个不联网的番茄钟。点开始，25 分钟后它会响；每完成一个番茄，桌上那盆绿植就长大一点，"
+  + "攒下的钻石可以往鱼缸里添条鱼，或者给她换顶帽子。六个场景随等级解锁，从深夜书桌一直到星际舱。"
+  + "环境音是现场算出来的，不加载任何音频文件——雨、篝火、风、键盘、咖啡馆六条音轨各自调音量，"
+  + "也能让它按场景自动配好。网址 " + SITE_URL;
+
+/* ── 色调 ── */
+function applyTone(t){
+  if(!TONE_SET[t]) t = "dusk";
+  D.tone = t;
+  document.body.dataset.tone = t;
+  document.querySelectorAll("#toneBox button").forEach(b => {
+    b.classList.toggle("on", b.dataset.tone === t);
+  });
+}
+
+/* ── 复制 ── */
+function copyText(txt, okMsg){
+  const ok = () => toast(okMsg, null);
+  const fallback = () => {
+    try{
+      const ta = document.createElement("textarea");
+      ta.value = txt;
+      ta.style.cssText = "position:fixed;left:-9999px;top:0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      ok();
+    }catch(e){ toast("复制不了", "手动选中那段字复制吧"); }
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(ok).catch(fallback);
+  }else fallback();
+}
+
+function refreshGems(){ const g = $("gems"); if(g) g.textContent = D.gems; }
+
+/* ── 顶栏 ── */
+function renderTop(){
+  const now = new Date();
+  const target = new Date(D.examDate);
+  let ms = target - now;
+  if(ms < 0) ms = 0;
+  const days = Math.floor(ms / 86400000);
+  const h = Math.floor(ms % 86400000 / 3600000);
+  const m = Math.floor(ms % 3600000 / 60000);
+  const s = Math.floor(ms % 60000 / 1000);
+
+  $("cdDays").textContent = days;
+  $("cdHMS").textContent = pad(h) + ":" + pad(m) + ":" + pad(s);
+  const start = new Date(D.since || "2026-09-01T00:00:00");
+  $("cdPast").textContent = Math.max(0, Math.floor((now - start) / 86400000));
+
+  const L = lvFromXp(D.xp);
+  $("lvNum").textContent = L.lv;
+  const inLv = D.xp - L.base;
+  $("xpNow").textContent = inLv;
+  $("xpNeed").textContent = L.need;
+  $("xpBar").style.width = Math.max(0, Math.min(100, inLv / L.need * 100)) + "%";
+
+  const nx = SCENES.filter(x => x.lv > L.lv).sort((a, b) => a.lv - b.lv)[0];
+  $("nextScene").textContent = nx ? (nx.name + "（LV" + nx.lv + "）") : "全部解锁";
+  refreshGems();
+  document.title = "D-" + days + " · 考研专注室";
+}
+
+/* ── 场景 ── */
+function renderScene(){
+  $("sceneSvg").innerHTML = sceneSVG();
+  document.body.dataset.scene = D.scene;
+
+  const lv = lvFromXp(D.xp).lv;
+  $("sceneTop").innerHTML = SCENES.map(s => {
+    const un = D.unlocked.indexOf(s.id) >= 0;
+    const sel = D.scene === s.id;
+    return '<button class="pill' + (un ? "" : " lock") + (sel ? " sel" : "") +
+           '" data-sc="' + s.id + '" data-lv="' + s.lv + '">' +
+           (un ? esc(s.name) : esc(s.name) + " 🔒LV" + s.lv) + '</button>';
+  }).join("") + '<span class="pill grow" style="pointer-events:none;background:rgba(0,0,0,.35)">LV' + lv + '</span>';
+
+  const sc = nowScene();
+  let st = PLANT_STAGES[0];
+  PLANT_STAGES.forEach(x => { if((D.total.pomodoros || 0) >= x.min) st = x; });
+  $("sceneCap").innerHTML = "<b>" + esc(sc.name) + "</b> · " + esc(sc.desc) +
+    "<br>" + dayPhase().name + " · 盆栽：<b>" + esc(st.name) + "</b> · 累计 " + (D.total.pomodoros || 0) + " 个番茄";
+}
+
+/* ── 鱼缸 ── */
+function renderTank(){
+  $("tankSvg").innerHTML = tankSVG();
+  const n = (D.fish || []).length;
+  if(n === 0){
+    $("tankHead").textContent = "鱼缸空着";
+    $("tankSub").textContent = "去装扮商店买一条鱼。它会自己攒钻石，养大了能卖更高价。";
+    return;
+  }
+  let soonest = Infinity, totalRate = 0;
+  D.fish.forEach(f => {
+    const k = FISH_KINDS[f.kind];
+    if(!k) return;
+    totalRate += 60000 / k.every;
+    const left = k.every - ((Date.now() - (f.lastYield || f.born)) % k.every);
+    if(left < soonest) soonest = left;
+  });
+  $("tankHead").innerHTML = n + " 条鱼 · 约 <b>" + totalRate.toFixed(1) + "</b> 颗 / 分钟";
+  $("tankSub").textContent = "下一次收成还有 " + Math.max(1, Math.round(soonest / 1000)) + " 秒。养大后卖出能拿回 1.7 倍。";
+}
+
+/* ── 混音 ── */
+function renderMix(){
+  $("mixGrid").innerHTML = MIX_KEYS.map(k => {
+    const v = D.mix[k.id] || 0;
+    return '<div class="mix-row">' +
+      '<span class="mi">' + k.name + '</span>' +
+      '<input type="range" min="0" max="100" value="' + v + '" data-mix="' + k.id + '" class="' + (v ? "" : "off") + '">' +
+      '<span class="mix-val num" id="mv-' + k.id + '">' + v + '</span></div>';
+  }).join("");
+  $("btnMusic").classList.toggle("on", !!D.settings.music);
+  applyMix();
+}
+
+/* ── 科目 ── */
+function renderSubjects(){
+  const box = $("subjects");
+  box.innerHTML = "";
+  let doneAll = 0, totalAll = 0;
+
+  D.subjects.forEach((s, si) => {
+    const done = s.chapters.filter(c => c.done).length;
+    const total = s.chapters.length;
+    doneAll += done; totalAll += total;
+    const pct = total ? Math.round(done / total * 100) : 0;
+
+    const wrap = document.createElement("div");
+    wrap.className = "subj";
+    wrap.innerHTML =
+      '<div class="subj-head">' +
+        '<span class="subj-dot" style="background:' + s.color + '"></span>' +
+        '<span class="subj-name">' + esc(s.name) + '</span>' +
+        (s.score ? '<span class="subj-score">' + s.score + ' 分</span>' : '') +
+        '<span class="subj-pct num">' + pct + '%</span>' +
+        '<span class="subj-arrow">▶</span>' +
+      '</div>' +
+      '<div class="track"><div class="fill" style="width:' + pct + '%;background:' + s.color + '"></div></div>' +
+      '<div class="chapters"></div>';
+
+    const chBox = wrap.querySelector(".chapters");
+    s.chapters.forEach((c, ci) => {
+      const el = document.createElement("div");
+      el.className = "ch" + (c.done ? " done" : "");
+      el.innerHTML = '<span class="box">✓</span><span>' + esc(c.name) + '</span>';
+      el.onclick = e => {
+        e.stopPropagation();
+        const was = s.chapters[ci].done;
+        s.chapters[ci].done = !was;
+        if(!was) addXp(4);
+        save(); renderSubjects(); checkAchievements(); renderAchievements(); renderTop();
+      };
+      chBox.appendChild(el);
+    });
+
+    wrap.querySelector(".subj-head").onclick = () => wrap.classList.toggle("open");
+    box.appendChild(wrap);
+  });
+
+  const overall = totalAll ? Math.round(doneAll / totalAll * 100) : 0;
+  $("overallPct").textContent = overall + "%";
+  return overall;
+}
+
+/* ── 任务 ── */
+function renderTasks(){
+  const box = $("taskList");
+  const today = D.tasks.filter(t => t.date === dayKey());
+  const doneN = today.filter(t => t.done).length;
+  $("taskCount").textContent = doneN + " / " + today.length;
+
+  box.innerHTML = "";
+  if(!today.length){
+    box.innerHTML = '<div class="empty-hint">还没有任务。<br>写一件今天必须完成的事，越小越好。</div>';
+    return;
+  }
+  today.forEach(t => {
+    const el = document.createElement("div");
+    el.className = "task" + (t.done ? " done" : "");
+    el.innerHTML = '<span class="box">✓</span><span class="t-txt">' + esc(t.text) + '</span>' +
+                   '<button class="t-del" title="删除">×</button>';
+    el.querySelector(".t-del").onclick = e => {
+      e.stopPropagation();
+      D.tasks = D.tasks.filter(x => x.id !== t.id);
+      save(); renderTasks();
+    };
+    el.onclick = () => {
+      t.done = !t.done;
+      if(t.done){
+        D.tasksDoneTotal += 1;
+        todayStat().tasks += 1;
+        addXp(6); addGems(1);
+      }else{
+        D.tasksDoneTotal = Math.max(0, D.tasksDoneTotal - 1);
+        todayStat().tasks = Math.max(0, todayStat().tasks - 1);
+      }
+      save(); renderTasks(); checkAchievements(); renderAchievements(); renderTop();
+    };
+    box.appendChild(el);
+  });
+}
+
+/* ── 成就 ── */
+function anyChapterDone(){ return D.subjects.some(s => s.chapters.some(c => c.done)); }
+function overallProgress(){
+  let d = 0, t = 0;
+  D.subjects.forEach(s => { d += s.chapters.filter(c => c.done).length; t += s.chapters.length; });
+  return t ? d / t * 100 : 0;
+}
+
+function checkAchievements(){
+  const st = todayStat();
+  const overall = overallProgress();
+  const eaten = {};
+  Object.keys(RECIPES).forEach(k => { if(D.recipes.indexOf(k) >= 0) eaten[k] = 1; });
+
+  const list = {
+    first:  (D.total.pomodoros || 0) >= 1,
+    p10:    (D.total.pomodoros || 0) >= 10,
+    p50:    (D.total.pomodoros || 0) >= 50,
+    p200:   (D.total.pomodoros || 0) >= 200,
+    p500:   (D.total.pomodoros || 0) >= 500,
+    m4:     st.minutes >= 240,
+    m8:     st.minutes >= 480,
+    m12:    st.minutes >= 720,
+    s3:     D.streak.best >= 3,
+    s7:     D.streak.best >= 7,
+    s30:    D.streak.best >= 30,
+    s100:   D.streak.best >= 100,
+    t1:     D.tasksDoneTotal >= 1,
+    t100:   D.tasksDoneTotal >= 100,
+    c1:     anyChapterDone(),
+    half:   overall >= 50,
+    alldone: overall >= 100,
+    sc3:    D.unlocked.length >= 3,
+    sc6:    D.unlocked.length >= 6,
+    d1:     D.decor.length >= 1,
+    d5:     D.decor.length >= 5,
+    r6:     Object.keys(eaten).length >= 6,
+    r12:    Object.keys(eaten).length >= 12,
+    fish:   !!D.fishSold
+  };
+  let got = 0;
+  Object.keys(list).forEach(k => {
+    if(list[k] && !D.achievements[k]){
+      D.achievements[k] = Date.now();
+      D.gems += 5;
+      const a = ACHIEVEMENTS.filter(x => x.id === k)[0];
+      if(a) toast("成就 · " + a.name, "+5 钻石");
+    }
+  });
+  save();
+}
+
+function renderAchievements(){
+  const box = $("achievements");
+  box.innerHTML = "";
+  let got = 0;
+  ACHIEVEMENTS.forEach(a => {
+    const on = !!D.achievements[a.id];
+    if(on) got++;
+    const el = document.createElement("div");
+    el.className = "ach" + (on ? " on" : "");
+    el.innerHTML = "<b>" + esc(a.name) + "</b><i>" + esc(a.desc) + "</i>";
+    box.appendChild(el);
+  });
+  $("achCount").textContent = got + " / " + ACHIEVEMENTS.length;
+}
+
+/* ── 统计 ── */
+function renderStats(){
+  const st = todayStat();
+  $("todayPomo").textContent = st.pomodoros;
+  $("todayMin").textContent = st.minutes;
+  $("streak").textContent = D.streak.current;
+  $("totalPomo").textContent = D.total.pomodoros || 0;
+
+  const chart = $("chart");
+  chart.innerHTML = "";
+  let max = 1;
+  const days = [];
+  for(let i = 13; i >= 0; i--){
+    const d = new Date(Date.now() - i * 86400000);
+    const k = dayKey(d);
+    const v = (D.daily[k] && D.daily[k].minutes) || 0;
+    days.push({ k:k, label:(d.getMonth() + 1) + "/" + d.getDate(), v:v });
+    if(v > max) max = v;
+  }
+  days.forEach(d => {
+    const w = document.createElement("div");
+    w.className = "bar-wrap";
+    const h = Math.round(d.v / max * 80);
+    w.innerHTML = '<div class="bar' + (d.v ? "" : " empty") + '" style="height:' + (d.v ? Math.max(4, h) : 4) +
+                  'px" title="' + d.label + " · " + d.v + ' 分钟"></div>';
+    chart.appendChild(w);
+  });
+  $("chartFrom").textContent = days[0].label;
+  if(!days.some(d => d.v > 0)){
+    chart.innerHTML = '<div style="flex:1;text-align:center;font-size:11px;color:var(--tx-3);padding-top:26px">还没有专注记录。点上面的开始，第一根柱子会出现在这里。</div>';
+  }
+}
+
+/* ── 商店 ── */
+function renderShop(){
+  $("mSub").textContent = "钻石 " + D.gems;
+  $("shopGrid").innerHTML = SHOP_ITEMS.map(it => {
+    const owned = D.decor.indexOf(it.id) >= 0;
+    const can = D.gems >= it.price;
+    return '<div class="shop-item' + (owned ? " owned" : "") + '">' +
+      '<div class="si-top"><div class="si-ic"><svg viewBox="0 0 22 22">' + it.icon + '</svg></div>' +
+      '<div><div class="si-n">' + esc(it.name) + '</div>' +
+      '<div style="font-size:10.5px;color:var(--blue)">' + (owned ? "已拥有" : it.price + " 钻石") + '</div></div></div>' +
+      '<div class="si-d">' + esc(it.desc) + '</div>' +
+      '<button data-buy="' + it.id + '"' + (owned ? ' class="act" disabled' : (can ? "" : " disabled")) + '>' +
+      (owned ? "已摆上" : (can ? "买下" : "钻石不够")) + '</button></div>';
+  }).join("");
+
+  $("fishGrid").innerHTML = Object.keys(FISH_KINDS).map(k => {
+    const f = FISH_KINDS[k];
+    const full = D.fish.length >= TANK_MAX;
+    const can = D.gems >= f.price && !full;
+    return '<div class="shop-item">' +
+      '<div class="si-top"><div class="si-ic" style="background:transparent">' +
+      '<svg viewBox="0 0 24 24"><ellipse cx="10" cy="12" rx="7" ry="4.4" fill="' +
+      (k === "small" ? "#F5C451" : k === "mid" ? "#FF8A5A" : "#FF6BD6") + '"/>' +
+      '<path d="M17 12 l6 -4 l0 8 Z" fill="' + (k === "small" ? "#F5C451" : k === "mid" ? "#FF8A5A" : "#FF6BD6") + '" opacity=".8"/></svg></div>' +
+      '<div><div class="si-n">' + f.name + '</div>' +
+      '<div style="font-size:10.5px;color:var(--blue)">' + f.price + ' 钻石</div></div></div>' +
+      '<div class="si-d">' + f.desc + '</div>' +
+      '<button data-fish="' + k + '"' + (can ? "" : " disabled") + '>' +
+      (full ? "鱼缸满了" : (D.gems >= f.price ? "买一条" : "钻石不够")) + '</button></div>';
+  }).join("") + fishSellHTML();
+}
+
+function fishSellHTML(){
+  if(!D.fish.length) return "";
+  return '<div style="grid-column:1/-1;margin-top:4px"><div class="card-title" style="margin-bottom:8px">鱼缸里的</div></div>' +
+    D.fish.map((f, i) => {
+      const k = FISH_KINDS[f.kind];
+      const grown = (Date.now() - f.born) >= k.grow;
+      const price = Math.floor(k.price * 1.7);
+      return '<div class="shop-item"><div class="si-top"><div class="si-ic" style="background:transparent">' +
+        '<svg viewBox="0 0 24 24"><ellipse cx="10" cy="12" rx="7" ry="4.4" fill="#8FB3D9" opacity=".8"/></svg></div>' +
+        '<div><div class="si-n">' + k.name + '</div>' +
+        '<div style="font-size:10.5px;color:var(--tx-3)">' + (grown ? "已长大" : "成长中 " +
+          Math.floor((Date.now() - f.born) / k.grow * 100) + "%") + '</div></div></div>' +
+        '<div class="si-d">卖价 ' + price + ' 钻石' + (grown ? "（可以卖了）" : "（长大更划算）") + '</div>' +
+        '<button data-sell="' + i + '">卖掉</button></div>';
+    }).join("");
+}
+
+/* ── 饮品 ── */
+let brewSel = { base:null, add:null };
+function renderBrew(){
+  $("brewBase").innerHTML = BREW_BASE.map(b =>
+    '<button class="chip' + (brewSel.base === b.id ? " on" : "") + '" data-base="' + b.id + '">' + b.cup + " " + b.name + '</button>').join("");
+  $("brewAdd").innerHTML = BREW_ADD.map(a =>
+    '<button class="chip' + (brewSel.add === a.id ? " on" : "") + '" data-add="' + a.id + '">' + a.name + '</button>').join("");
+  renderBrewOut();
+  renderRecipes();
+}
+function renderBrewOut(){
+  const out = $("brewOut");
+  if(!brewSel.base || !brewSel.add){
+    out.innerHTML = '<div class="bo-cup">☕</div>' +
+      '<div class="bo-n">选一个基底和一个加料</div>' +
+      '<div class="bo-d">调过的组合会记进配方册。首次调出 +20 XP +5 钻石。</div>';
+    return;
+  }
+  const key = brewSel.base + "+" + brewSel.add;
+  const r = RECIPES[key];
+  const known = D.recipes.indexOf(key) >= 0;
+  const cup = BREW_BASE.filter(b => b.id === brewSel.base)[0].cup;
+  out.innerHTML = '<div class="bo-cup">' + cup + '</div>' +
+    '<div class="bo-n">' + esc(r.n) + (known ? "" : " · 新配方") + '</div>' +
+    '<div class="bo-d">' + esc(r.d) + '</div>' +
+    '<button class="ibtn" id="brewMake" style="margin-top:4px">' + (known ? "再调一杯" : "调这杯") + '</button>';
+  $("brewMake").onclick = () => {
+    if(!known){
+      D.recipes.push(key);
+      addXp(20); addGems(5);
+      toast("新配方 · " + r.n, "+20 XP · +5 钻石");
+      // 顺手把这一杯算进专注加成：下一个番茄多给经验
+      D.buffNext = 1;
+    }else{
+      toast("调好了 · " + r.n, "喝一口，接着写");
+    }
+    save(); renderBrew(); renderTop(); checkAchievements(); renderAchievements();
+  };
+}
+function renderRecipes(){
+  $("recGrid").innerHTML = Object.keys(RECIPES).map(k => {
+    const r = RECIPES[k], on = D.recipes.indexOf(k) >= 0;
+    return '<div class="rec' + (on ? " on" : "") + '"><b>☕</b>' + (on ? esc(r.n) : "? ? ?") + '</div>';
+  }).join("");
+  $("recCount").textContent = D.recipes.length + " / " + Object.keys(RECIPES).length;
+}
+
+/* ── 手机 ── */
+function renderPhone(){
+  const L = lvFromXp(D.xp).lv;
+  const shown = MESSAGES.filter(m => m.lv <= L);
+  const next = MESSAGES.filter(m => m.lv > L).sort((a, b) => a.lv - b.lv)[0];
+  let html = shown.map(m =>
+    '<div class="msg"><div class="av">' + esc(m.who.slice(0, 1)) + '</div>' +
+    '<div class="bub"><b>' + esc(m.who) + '</b>' + esc(m.text) + '</div></div>').join("");
+  if(next){
+    html += '<div class="msg lock"><div class="av">?</div>' +
+            '<div class="bub">还有一条留言没解锁。到 LV' + next.lv + ' 时会出现。</div></div>';
+  }
+  $("phoneList").innerHTML = html;
+}
+
+/* ── 便签 / 日记 ── */
+const STICKY_BG = ["#F5E6A8","#CDE8C0","#F5C9B8","#C7DDF0"];
+function renderMemo(){
+  $("stickies").innerHTML = D.stickies.map((t, i) => {
+    const txt = t && t.trim() ? esc(t) : "点一下写点什么";
+    return '<div class="sticky' + (t && t.trim() ? "" : " empty") + '" data-st="' + i + '" ' +
+           'style="background:' + STICKY_BG[i] + '">' + txt + '</div>';
+  }).join("");
+  const list = (D.diary || []).slice().reverse().slice(0, 30);
+  $("diaryList").innerHTML = list.length
+    ? list.map(d => '<div class="diary-item"><i>' + esc(d.date) + '</i><span>' + esc(d.text) + '</span></div>').join("")
+    : '<div class="empty-hint">还没有记录。写下今天的一句话。</div>';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   五、番茄钟
+   ═══════════════════════════════════════════════════════════ */
+const RING_LEN = 615.75;
+let T = { mode:"focus", running:false, endAt:0, remain:25 * 60000, cycle:1 };
+
+function modeMs(mode){
+  const s = D.settings;
+  if(mode === "focus") return s.focusMin * 60000;
+  if(mode === "short") return s.shortMin * 60000;
+  return s.longMin * 60000;
+}
+function modeLabel(mode){ return mode === "focus" ? "专注" : mode === "short" ? "短休" : "长休"; }
+
+function setMode(mode, keepRunning){
+  T.mode = mode;
+  T.remain = modeMs(mode);
+  T.endAt = Date.now() + T.remain;
+  if(!keepRunning) T.running = false;
+  document.querySelectorAll(".mode").forEach(b => b.classList.toggle("on", b.dataset.mode === mode));
+  renderTimer();
+}
+
+function renderTimer(){
+  const total = modeMs(T.mode);
+  const left = Math.max(0, T.remain);
+  $("clock").textContent = Math.floor(left / 60000) + ":" + pad(Math.floor(left % 60000 / 1000));
+
+  const pct = total > 0 ? 1 - left / total : 0;
+  const ring = $("ring");
+  ring.setAttribute("stroke-dasharray", RING_LEN);
+  ring.setAttribute("stroke-dashoffset", RING_LEN * (1 - Math.min(1, Math.max(0, pct))));
+  ring.setAttribute("stroke", T.mode === "focus" ? "var(--focus)" : "var(--rest)");
+
+  $("clockSub").textContent = modeLabel(T.mode) + " · 第 " + T.cycle + " 个番茄";
+  $("btnStart").textContent = T.running ? "暂停" : (left < total ? "继续" : "开始");
+
+  document.body.classList.toggle("studying", T.running && T.mode === "focus");
+  document.body.classList.toggle("resting", T.running && T.mode !== "focus");
+}
+
+function tickTimer(){
+  if(!T.running) return;
+  T.remain = Math.max(0, T.endAt - Date.now());
+  if(T.remain <= 0){ finish(); return; }
+  renderTimer();
+}
+
+function finish(){
+  T.running = false;
+  const wasFocus = T.mode === "focus";
+
+  if(wasFocus){
+    const mins = D.settings.focusMin;
+    const st = todayStat();
+    st.pomodoros += 1;
+    st.minutes += mins;
+    D.total.pomodoros = (D.total.pomodoros || 0) + 1;
+    D.total.minutes = (D.total.minutes || 0) + mins;
+    D.completedInCycle += 1;
+    bumpStreak();
+    const bonus = D.buffNext ? 1 : 0;
+    D.buffNext = 0;
+    addXp(12 + bonus * 6, bonus ? "上杯饮品的加成" : null);
+    addGems(1);
+    checkAchievements();
+  }
+
+  if(D.settings.sound) chime(wasFocus);
+
+  let next;
+  if(wasFocus){
+    next = (D.completedInCycle % D.settings.longEvery === 0) ? "long" : "short";
+  }else{
+    next = "focus";
+    if(T.mode !== "short") D.completedInCycle = 0;
+  }
+  if(next === "focus") T.cycle = Math.floor(D.completedInCycle) + 1;
+
+  setMode(next, false);
+  save();
+  renderAll();
+
+  if(D.settings.autoNext){
+    setTimeout(() => { if(!T.running) toggle(); }, 700);
+  }
+}
+
+function toggle(){
+  audioStart(); audioResume();
+  if(T.running){
+    T.remain = Math.max(0, T.endAt - Date.now());
+    T.running = false;
+  }else{
+    if(T.remain <= 0) T.remain = modeMs(T.mode);
+    T.endAt = Date.now() + T.remain;
+    T.running = true;
+    if(D.settings.autoAudio && !D.settings.music && MIX_KEYS.every(k => !(D.mix[k.id] > 0))){
+      const sc = nowScene();
+      Object.keys(sc.ambience).forEach(k => { D.mix[k] = sc.ambience[k]; });
+      renderMix(); save();
+    }
+  }
+  renderTimer();
+}
+
+function bumpStreak(){
+  const t = dayKey();
+  const y = dayKey(new Date(Date.now() - 86400000));
+  if(D.streak.lastDate === t) return;
+  if(D.streak.lastDate === y) D.streak.current += 1;
+  else D.streak.current = 1;
+  D.streak.lastDate = t;
+  if(D.streak.current > D.streak.best) D.streak.best = D.streak.current;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   六、主渲染
+   ═══════════════════════════════════════════════════════════ */
+function renderAll(){
+  renderTop();
+  renderScene();
+  renderTank();
+  renderMix();
+  renderStats();
+  renderSubjects();
+  renderTasks();
+  renderAchievements();
+  renderTimer();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   七、面板
+   ═══════════════════════════════════════════════════════════ */
+function switchTab(pane){
+  document.querySelectorAll("#mTabs .tab").forEach(b => b.classList.toggle("on", b.dataset.pane === pane));
+  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("on", p.id === "pane-" + pane));
+  const titles = { shop:"装扮商店", brew:"饮品台", phone:"手机", memo:"便签 · 日记" };
+  $("mTitle").textContent = titles[pane] || "";
+  if(pane === "shop"){ renderShop(); $("mSub").textContent = "钻石 " + D.gems; }
+  if(pane === "phone"){ renderPhone(); $("mSub").textContent = "按等级陆续有留言进来"; }
+  if(pane === "memo"){ renderMemo(); $("mSub").textContent = "只存在本机"; }
+  if(pane === "brew"){ renderBrew(); $("mSub").textContent = D.recipes.length + " / " + Object.keys(RECIPES).length + " 种配方"; }
+}
+function openModal(pane){
+  $("modal").classList.add("show");
+  switchTab(pane || "shop");
+}
+function closeModal(){ $("modal").classList.remove("show"); }
+
+/* ═══════════════════════════════════════════════════════════
+   八、事件绑定
+   ═══════════════════════════════════════════════════════════ */
+function bind(){
+  // 番茄钟
+  document.querySelectorAll(".mode").forEach(b => {
+    b.onclick = () => { if(T.running) return; setMode(b.dataset.mode, false); };
+  });
+  $("btnStart").onclick = toggle;
+  $("btnReset").onclick = () => { T.running = false; setMode(T.mode, false); };
+  $("btnSkip").onclick  = () => { T.running = false; T.remain = 0; finish(); };
+
+  // 设置
+  const s = D.settings;
+  $("setFocus").value = s.focusMin;
+  $("setShort").value = s.shortMin;
+  $("setLong").value = s.longMin;
+  $("setEvery").value = s.longEvery;
+  $("setFocus").onchange = e => { s.focusMin = clamp(e.target.value, 1, 180, 25); e.target.value = s.focusMin; if(T.mode === "focus" && !T.running) setMode("focus", false); save(); };
+  $("setShort").onchange = e => { s.shortMin = clamp(e.target.value, 1, 60, 5); e.target.value = s.shortMin; if(T.mode === "short" && !T.running) setMode("short", false); save(); };
+  $("setLong").onchange  = e => { s.longMin  = clamp(e.target.value, 1, 90, 15); e.target.value = s.longMin; if(T.mode === "long" && !T.running) setMode("long", false); save(); };
+  $("setEvery").onchange = e => { s.longEvery = clamp(e.target.value, 2, 12, 4); e.target.value = s.longEvery; save(); };
+
+  const swAuto = $("swAuto"), swSound = $("swSound"), swAutoAudio = $("swAutoAudio");
+  swAuto.classList.toggle("on", !!s.autoNext);
+  swSound.classList.toggle("on", !!s.sound);
+  swAutoAudio.classList.toggle("on", !!s.autoAudio);
+  swAuto.onclick = () => { s.autoNext = !s.autoNext; swAuto.classList.toggle("on", s.autoNext); save(); };
+  swSound.onclick = () => { s.sound = !s.sound; swSound.classList.toggle("on", s.sound); if(s.sound){ audioStart(); chime(true); } save(); };
+  swAutoAudio.onclick = () => { s.autoAudio = !s.autoAudio; swAutoAudio.classList.toggle("on", s.autoAudio); save(); };
+
+  // 色调切换
+  $("toneBox").onclick = e => {
+    const b = e.target.closest("button");
+    if(!b || !b.dataset.tone) return;
+    applyTone(b.dataset.tone);
+    save();
+  };
+
+  // 复制分享
+  $("btnCopyUrl").onclick = () => copyText(SITE_URL, "链接已复制");
+  $("btnCopyTxt").onclick = () => copyText(INTRO, "介绍已复制");
+  if($("shareIntro")) $("shareIntro").textContent = INTRO.replace("网址 " + SITE_URL, "").trim();
+
+  // 设置折叠
+  $("setToggle").onclick = () => {
+    const b = $("setBody");
+    const open = b.style.display !== "none";
+    b.style.display = open ? "none" : "block";
+    $("setHint").textContent = open ? "展开" : "收起";
+  };
+
+  // 目标
+  $("goalBtn").onclick = () => {
+    openDlg({
+      title:"修改目标",
+      html:"写在倒计时下面的一行字。可以填院校、专业代码，或者只写一句狠话。",
+      input: D.goal,
+      onYes: () => { const v = $("dlgInput").value.trim(); if(v){ D.goal = v; $("goalBtn").textContent = v; save(); } }
+    });
+  };
+
+  // 场景切换
+  $("sceneTop").onclick = e => {
+    const b = e.target.closest(".pill");
+    if(!b || !b.dataset.sc) return;
+    const id = b.dataset.sc;
+    if(D.unlocked.indexOf(id) < 0){
+      toast("还没解锁 · " + SCENE_BY_ID[id].name, "到 LV" + b.dataset.lv + " 自动解锁");
+      return;
+    }
+    D.scene = id;
+    const sc = SCENE_BY_ID[id];
+    Object.keys(sc.ambience).forEach(k => { D.mix[k] = sc.ambience[k]; });
+    audioStart(); audioResume();
+    save(); renderScene(); renderTop(); renderMix();
+    toast(sc.name, "已套用这个场景的声音");
+  };
+
+  // 混音
+  $("mixGrid").oninput = e => {
+    const el = e.target;
+    if(!el.dataset.mix) return;
+    audioStart(); audioResume();
+    D.mix[el.dataset.mix] = +el.value;
+    el.classList.toggle("off", !+el.value);
+    $("mv-" + el.dataset.mix).textContent = el.value;
+    applyMix();
+    clearTimeout(AUDIO.mixSave);
+    AUDIO.mixSave = setTimeout(save, 600);
+  };
+  $("btnMusic").onclick = () => {
+    audioStart(); audioResume();
+    D.settings.music = !D.settings.music;
+    musicSet(D.settings.music);
+    save();
+  };
+  $("mixPreset").onclick = () => {
+    const sc = nowScene();
+    Object.keys(sc.ambience).forEach(k => { D.mix[k] = sc.ambience[k]; });
+    audioStart(); audioResume();
+    renderMix(); save();
+    toast("已套用 " + sc.name + " 的声音", null);
+  };
+  $("btnMuteAll").onclick = () => {
+    MIX_KEYS.forEach(k => { D.mix[k.id] = 0; });
+    D.settings.music = false;
+    musicSet(false); renderMix(); save();
+    toast("已全部静音", null);
+  };
+
+  // 任务
+  $("taskAdd").onclick = addTask;
+  $("taskInput").onkeydown = e => { if(e.key === "Enter") addTask(); };
+
+  // 面板
+  $("btnShop").onclick  = () => openModal("shop");
+  $("btnBrew").onclick  = () => openModal("brew");
+  $("btnPhone").onclick = () => openModal("phone");
+  $("btnMore").onclick  = () => openModal("memo");
+  $("mClose").onclick = closeModal;
+  $("modal").onclick = e => { if(e.target.id === "modal") closeModal(); };
+  $("mTabs").onclick = e => { const b = e.target.closest(".tab"); if(b) switchTab(b.dataset.pane); };
+
+  // 商店购买
+  $("shopGrid").onclick = e => {
+    const b = e.target.closest("button");
+    if(!b) return;
+    if(b.dataset.buy){
+      const it = SHOP_ITEMS.filter(x => x.id === b.dataset.buy)[0];
+      if(!it || D.decor.indexOf(it.id) >= 0) return;
+      if(D.gems < it.price){ toast("钻石不够", "还差 " + (it.price - D.gems) + " 颗"); return; }
+      D.gems -= it.price;
+      D.decor.push(it.id);
+      save(); renderShop(); renderScene(); refreshGems(); checkAchievements(); renderAchievements();
+      toast("买下了 · " + it.name, "已经摆进场景里");
+    }
+    if(b.dataset.fish){
+      const k = FISH_KINDS[b.dataset.fish];
+      if(!k) return;
+      if(D.fish.length >= TANK_MAX){ toast("鱼缸满了", "先卖掉一条"); return; }
+      if(D.gems < k.price){ toast("钻石不够", "还差 " + (k.price - D.gems) + " 颗"); return; }
+      D.gems -= k.price;
+      D.fish.push({ id:"f" + Date.now() + Math.floor(Math.random() * 999), kind:b.dataset.fish, born:Date.now(), lastYield:Date.now() });
+      save(); renderShop(); renderTank(); refreshGems();
+      toast("放进鱼缸了 · " + k.name, null);
+    }
+    if(b.dataset.sell !== undefined){
+      const i = +b.dataset.sell;
+      const f = D.fish[i];
+      if(!f) return;
+      const k = FISH_KINDS[f.kind];
+      const grown = (Date.now() - f.born) >= k.grow;
+      const price = Math.floor(k.price * (grown ? 1.7 : 1.1));
+      confirmBox("卖掉这条鱼？", k.name + " 现在能卖 <b style='color:var(--blue)'>" + price + " 钻石</b>。" +
+        (grown ? "" : "<br><span style='color:var(--tx-3)'>它还没长大，现在卖不划算。</span>"),
+        () => {
+          D.gems += price;
+          D.fish.splice(i, 1);
+          if(grown) D.fishSold = true;
+          save(); renderShop(); renderTank(); refreshGems(); checkAchievements(); renderAchievements();
+          toast("+" + price + " 钻石", null);
+        }, "卖掉");
+    }
+  };
+
+  // 配方
+  $("pane-brew").onclick = e => {
+    const b = e.target.closest(".chip");
+    if(!b) return;
+    audioStart(); audioResume();
+    if(b.dataset.base) brewSel.base = b.dataset.base;
+    if(b.dataset.add)  brewSel.add  = b.dataset.add;
+    renderBrew();
+    $("mSub").textContent = D.recipes.length + " / " + Object.keys(RECIPES).length + " 种配方";
+  };
+
+  // 便签
+  $("stickies").onclick = e => {
+    const el = e.target.closest(".sticky");
+    if(!el) return;
+    const i = +el.dataset.st;
+    openDlg({
+      title:"便签 " + (i + 1),
+      html:"贴在场景里的字。留空就是撕掉。",
+      input: D.stickies[i] || "",
+      onYes: () => { D.stickies[i] = $("dlgInput").value.slice(0, 60); save(); renderMemo(); }
+    });
+  };
+  $("diaryAdd").onclick = addDiary;
+  $("diaryInput").onkeydown = e => { if(e.key === "Enter") addDiary(); };
+
+  // 进度重置
+  $("btnResetProgress").onclick = () => {
+    confirmBox("清空复习进度？", "所有科目的章节勾选会被取消。番茄、任务、等级、钻石都不受影响。", () => {
+      D.subjects.forEach(s => s.chapters.forEach(c => { c.done = false; }));
+      save(); renderSubjects(); renderTop();
+    }, "清空");
+  };
+
+  // 数据
+  $("btnExport").onclick = exportData;
+  $("btnImport").onclick = () => $("fileImport").click();
+  $("fileImport").onchange = importData;
+  $("btnClear").onclick = () => {
+    confirmBox("清空全部数据？", "番茄、任务、进度、等级、钻石、场景、鱼、装扮全部归零，<b style='color:#FF6B6B'>无法恢复</b>。<br>" +
+      "建议先导出备份。", () => {
+        localStorage.removeItem(KEY);
+        D = blank();
+        D.subjects = buildSubjects(null);
+        save(); renderAll();
+        toast("已重置", null);
+      }, "确认清空");
+  };
+
+  // 对话框
+  $("dlgYes").onclick = () => { const cb = dlgCb; closeDlg(); if(cb) cb(); };
+  $("dlgNo").onclick = closeDlg;
+  $("dlgClose").onclick = closeDlg;
+  $("dlgInput").onkeydown = e => { if(e.key === "Enter"){ const cb = dlgCb; closeDlg(); if(cb) cb(); } };
+
+  // 快捷键
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape"){ closeModal(); closeDlg(); return; }
+    const tag = (e.target.tagName || "").toUpperCase();
+    if(tag === "INPUT" || tag === "TEXTAREA") return;
+    if(e.code === "Space"){ e.preventDefault(); toggle(); }
+    else if(e.key === "r" || e.key === "R"){ T.running = false; setMode(T.mode, false); }
+    else if(e.key === "s" || e.key === "S"){ T.running = false; T.remain = 0; finish(); }
+    else if(e.key === "m" || e.key === "M"){ openModal("memo"); }
+  });
+
+  // 任意点击唤醒音频（浏览器自动播放策略）
+  document.addEventListener("pointerdown", function once(){
+    audioStart(); audioResume();
+    document.removeEventListener("pointerdown", once);
+  });
+}
+
+function addTask(){
+  const inp = $("taskInput");
+  const t = inp.value.trim();
+  if(!t) return;
+  D.tasks.push({ id:"t" + Date.now() + Math.random().toString(36).slice(2, 6), text:t, done:false, date:dayKey() });
+  inp.value = "";
+  save(); renderTasks();
+}
+function addDiary(){
+  const inp = $("diaryInput");
+  const t = inp.value.trim();
+  if(!t) return;
+  D.diary.push({ date:dayKey(), text:t });
+  inp.value = "";
+  save(); renderMemo();
+  toast("记下了", null);
+}
+function exportData(){
+  const blob = new Blob([JSON.stringify(D, null, 2)], { type:"application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "kaoyan-focus-backup-" + dayKey() + ".json";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+function importData(e){
+  const f = e.target.files && e.target.files[0];
+  if(!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const d = JSON.parse(r.result);
+      if(!d || typeof d !== "object") throw new Error("bad");
+      confirmBox("导入这份备份？", "当前数据会被覆盖。<br><span style='color:var(--tx-3)'>文件日期：" +
+        (d.examDate || "未知") + "</span>", () => {
+          localStorage.setItem(KEY, JSON.stringify(d));
+          D = load();
+          renderAll();
+          toast("导入完成", null);
+        }, "覆盖导入");
+    }catch(err){
+      toast("导入失败", "文件不是本应用的备份");
+    }
+    e.target.value = "";
+  };
+  r.readAsText(f);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   九、启动
+   ═══════════════════════════════════════════════════════════ */
+function boot(){
+  document.body.dataset.scene = D.scene;
+  applyTone(D.tone);
+  $("goalBtn").textContent = D.goal;
+  bind();
+  renderAll();
+  tankTick(true);          // 补算离线期间的鱼缸产出
+
+  setInterval(tickTimer, 200);
+  setInterval(renderTop, 1000);
+  setInterval(() => { tankTick(false); renderTank(); refreshGems(); }, 15000);
+
+  let lastDay = dayKey();
+  setInterval(() => {
+    const k = dayKey();
+    if(k !== lastDay){ lastDay = k; save(); renderAll(); }
+  }, 30000);
+
+  // 窗口失焦时也保持计时（pywebview 里不会被节流，这里只是兜底）
+  document.addEventListener("visibilitychange", () => { if(!document.hidden) renderAll(); });
+}
+boot();
+
+})();
+</script>
+</body>
+</html>
